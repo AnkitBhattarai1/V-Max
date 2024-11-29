@@ -15,6 +15,6 @@ public interface UserRepo extends JpaRepository<User,String>{
     @Query("Select u from User u where u.email = :email")
     public Optional<User> findByEmail(@Param("email")String email);
 
-    //@Query("Select u from users u where u.username= :input OR u.email= :input")
-    //public Optional<User> findByEmailorUsername(@Param("input") String input);
+    @Query("Select u from User u where u.userName= :input OR u.email= :input")
+    public Optional<User> findByEmailorUsername(@Param("input") String input);
 }

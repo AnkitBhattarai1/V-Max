@@ -23,7 +23,10 @@ public class User {
     @Column(name="user_id",length = 36)
     private String id;
 
-    @Column(name="email")
+    @Column(name="user_name", unique = true)
+    private String userName;
+
+    @Column(name="email", unique =  true)
     private String email;
 
     @Column(name="hashed_password")
@@ -54,6 +57,13 @@ public class User {
         this.password = password;
     }
 
+    public void setUserName(String username){
+        this.userName= username;
+    }
+    public String getUserName(){
+        return this.userName;
+    }
+    public void setAuthorities(Set<Authority> authorities){this.authorities=authorities;}
     public Set<Authority> getAuthorities(){
         return authorities;
     }
