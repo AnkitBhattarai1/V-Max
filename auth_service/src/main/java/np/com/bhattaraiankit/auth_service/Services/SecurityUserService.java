@@ -1,11 +1,13 @@
 package np.com.bhattaraiankit.auth_service.Services;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Service;
 import np.com.bhattaraiankit.auth_service.DTO.JWTResponse;
 import np.com.bhattaraiankit.auth_service.DTO.LoginRequest;
 import np.com.bhattaraiankit.auth_service.DTO.SignUpRequest;
-import np.com.bhattaraiankit.auth_service.Models.Authority;
 import np.com.bhattaraiankit.auth_service.Models.User;
 import np.com.bhattaraiankit.auth_service.Repo.UserRepo;
 import np.com.bhattaraiankit.auth_service.Security.SecurityUser;
@@ -35,9 +36,10 @@ public class SecurityUserService implements UserDetailsService,UserService
     @Autowired
     private  JwtUtils jwtUtil;
 
+    @Lazy
     @Autowired
-    private AuthenticationManager  authenticationManager;
-    
+   private AuthenticationManager authenticationManager;
+
     public SecurityUserService(
             UserRepo userRepo,
             PasswordEncoder passEncoder)
@@ -63,24 +65,29 @@ public class SecurityUserService implements UserDetailsService,UserService
 
 
     @Override
-    public String generateToken(LoginRequest user) {
-        // TODO Auto-generated method stub
-        return null;
+    public JWTResponse generateToken(LoginRequest user) {
+            Authentication a = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.email_or_username(),user.password()));
+            if(a.isAuthenticated()) {
+                System.out.println("this is "+ user.email_or_username());
+                JWTResponse res = new JWTResponse(jwtUtil.generateToken(user.email_or_username()), user.email_or_username(), List.of("Ankit"));     
+                return res;
+            }//return jwtUtil.generateToken(user.email_or_username());
+            throw new RuntimeException("Invalid credentials");
     }
 
 
 
     @Override
-    public JWTResponse signUpUser(SignUpRequest request) {
+    public String signUpUser(SignUpRequest request) {
        //TODO: whether the email is verified or not;;;;
        //
         User u = new User();
         u.setEmail(request.email());
         u.setPassword(passEncoder.encode(request.password()));
         u.setUserName(request.email()); 
-        Set<Authority> authority  =  new HashSet<>();
-        u.setAuthorities(authority);
+        u.setAuthorities(null);
         userRepo.save(u);
+        System.out.println(u.getEmail());
         return null;
     }
 

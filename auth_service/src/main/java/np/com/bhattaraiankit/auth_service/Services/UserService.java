@@ -11,7 +11,7 @@ import np.com.bhattaraiankit.auth_service.DTO.SignUpRequest;
 @Service
 public interface UserService {
 
-    public String generateToken(LoginRequest user);
+    public JWTResponse generateToken(LoginRequest user);
     public void validateToken(String token);
-    public JWTResponse signUpUser(SignUpRequest request); 
+    public String  signUpUser(SignUpRequest request); 
 }

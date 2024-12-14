@@ -30,8 +30,8 @@ public class JwtUtils {
 
     @PostConstruct
     public void init(){
-        this.secret = env.getProperty("secret");
-
+        //this.secret = env.getProperty("secret");
+        this.secret="lkfalflasfjalsjalsfjfaflasjdflafkkfajfkasfhasdkfashjfdhfdjfhhjhhjhjhfdaadddshfdhfasadksjf";
     }
 
     public Key getSignKey(){

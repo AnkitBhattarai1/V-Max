@@ -25,7 +25,9 @@ public class Authority {
     @ManyToMany(mappedBy = "authorities")
     private Set<User> users;
 
-    public Authority(){}
+    public Authority(){
+        this.name="dummy";
+    }
 
     public int getId(){
         return Id;
