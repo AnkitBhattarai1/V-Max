@@ -1,0 +1,15 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: API_GATEWAY
+    
+  cloud:
+    gateway:
+        routes:
+
+        - id: AUTH-SERVICE-REGISTER
+          uri: lb://AUTH-SERVICE
+          predicates:
+          - Path=/auth/**
