@@ -1,0 +1,40 @@
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between; /* This will keep 'V-MAX' on the left and links in the center */
+    align-items: center;
+    background-color: #141414;
+    padding: 10px 20px; /* Adjust padding for navbar size */
+    width: 100%;
+    position: fixed; /* Keeps the navbar at the top */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensures it stays on top of other elements */
+  }
+  
+  .navbar .logo {
+    font-size: 2rem; /* Font size for V-MAX */
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .navbar .links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+  }
+  
+  .navbar .links a {
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 15px; /* Space between the links */
+    font-size: 1.2rem; /* Font size for the links */
+    text-transform: capitalize;
+  }
+  
+  .navbar .links a:hover {
+    color: #e50914; /* Hover effect for the links */
+  }
+  
