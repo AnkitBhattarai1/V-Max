@@ -30,8 +30,15 @@
 		<java.version>21</java.version>
 		<spring-cloud.version>2023.0.3</spring-cloud.version>
 	</properties>
-	<dependencies>
+
+    <dependencies>
+
+
 		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter</artifactId>
+		</dependency>
+        <dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
 		</dependency>

@@ -33,7 +33,7 @@ public class AuthenticationController {
 
     @PostMapping("/getToken")
     public  ResponseEntity<JWTResponse> getToken(@RequestBody LoginRequest request){
-        System.out.println(userService.generateToken(request).token()); 
+        System.out.println("its here");
         return new ResponseEntity<JWTResponse>(userService.generateToken(request),HttpStatus.OK); 
     }
 

@@ -10,13 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 
 import np.com.bhattaraiankit.api_gateway.Utils.JwtUtils;
+
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config>{
 
     public AuthenticationFilter(){
         super(Config.class);
     }
-
-    
 
     @Autowired
     private JwtUtils jwtUtils;

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import np.com.bhattaraiankit.auth_service.DTO.JWTResponse;
 import np.com.bhattaraiankit.auth_service.DTO.LoginRequest;
+import np.com.bhattaraiankit.auth_service.DTO.RegistrationUserDTO;
 import np.com.bhattaraiankit.auth_service.DTO.SignUpRequest;
 import np.com.bhattaraiankit.auth_service.Models.User;
 import np.com.bhattaraiankit.auth_service.Repo.UserRepo;
@@ -32,6 +33,10 @@ public class SecurityUserService implements UserDetailsService,UserService
     private final UserRepo userRepo;
 
     private final PasswordEncoder passEncoder;
+
+
+    @Autowired
+    private UserServiceClient userServiceClient;
 
     @Autowired
     private  JwtUtils jwtUtil;
@@ -67,20 +72,22 @@ public class SecurityUserService implements UserDetailsService,UserService
     @Override
     public JWTResponse generateToken(LoginRequest user) {
             Authentication a = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.email_or_username(),user.password()));
+                System.out.println(user.email_or_username());
             if(a.isAuthenticated()) {
-                System.out.println("this is "+ user.email_or_username());
                 JWTResponse res = new JWTResponse(jwtUtil.generateToken(user.email_or_username()), user.email_or_username(), List.of("Ankit"));     
                 return res;
-            }//return jwtUtil.generateToken(user.email_or_username());
+            }
             throw new RuntimeException("Invalid credentials");
     }
 
-
-
+    //registers a new user to the system.. 
     @Override
     public String signUpUser(SignUpRequest request) {
-       //TODO: whether the email is verified or not;;;;
-       //
+       //TODO: whether the email is verified or not;;;;            
+        RegistrationUserDTO registeredUser = (userServiceClient.getUserByEmail(request.email())).orElseThrow(()-> new UsernameNotFoundException("The user is not registered"));
+            if(!registeredUser.isVerified()) throw new RuntimeException("The user is not verified please verify the");
+        System.out.println(registeredUser.email() + registeredUser.isVerified());
+
         User u = new User();
         u.setEmail(request.email());
         u.setPassword(passEncoder.encode(request.password()));

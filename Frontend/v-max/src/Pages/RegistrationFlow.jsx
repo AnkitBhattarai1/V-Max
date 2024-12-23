@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
+import { startRegistration, verifyCode } from "../Services/registrationService";
 import "../Styles/RegistrationFlow.css";
 
 const RegistrationFlow = () => {
@@ -9,25 +10,37 @@ const RegistrationFlow = () => {
   const [error, setError] = useState(""); // For validation messages
   const navigate = useNavigate(); // For redirecting to the homepage
 
-  // Handle email submission
-  const handleEmailSubmit = () => {
+  const handleEmailSubmit = async () => {
     if (!email) {
       setError("Please enter your email.");
       return;
     }
-    setError("");
-    setCurrentStep(2); // Move to OTP step
+
+    const result = await startRegistration(email);
+
+    if (result.success) {
+      setError(""); // Clear any previous errors
+      setCurrentStep(2); // Move to OTP step
+    } else {
+      setError(result.message);
+    }
   };
 
   // Handle OTP submission
-  const handleOtpSubmit = () => {
+  const handleOtpSubmit = async () => {
     const otpCode = otp.join(""); // Combine the 6 OTP inputs
     if (otpCode.length < 6) {
       setError("Please enter the complete 6-digit code.");
       return;
     }
-    setError("");
-    setCurrentStep(3); // Move to password step
+      const result =  await verifyCode(email,otpCode);
+      
+      if(result.success){
+          setError("");
+          setCurrentStep(3);
+      }
+      else
+          setError(result.message);
   };
 
   // Handle OTP input change

@@ -38,7 +38,7 @@ public class SecurityConfig {
     {
 
         httpSecurity.authorizeHttpRequests(auth->{
-            auth.requestMatchers("/auth/register", "/auth/test","/auth/getToken").permitAll().
+            auth.requestMatchers("/auth/register","/auth/getToken","/auth/getUser").permitAll().
                 anyRequest().authenticated();
         }).csrf(c->c.disable());
 

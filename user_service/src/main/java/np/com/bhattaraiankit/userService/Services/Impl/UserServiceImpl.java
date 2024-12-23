@@ -14,10 +14,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import np.com.bhattaraiankit.userService.DTO.RegistrationUserResponse;
+import np.com.bhattaraiankit.userService.DTO.UserRequest;
+import np.com.bhattaraiankit.userService.DTO.UserResponse;
 import np.com.bhattaraiankit.userService.Models.RegistrationUser;
 import np.com.bhattaraiankit.userService.Repository.RegistrationUserRepo;
 import np.com.bhattaraiankit.userService.Repository.UserRepo;
 import np.com.bhattaraiankit.userService.Services.UserService;
+import np.com.bhattaraiankit.userService.Utils.BloomFilter.BloomFilter;
+import np.com.bhattaraiankit.userService.Utils.BloomFilter.BloomFilterService;
 import np.com.bhattaraiankit.userService.exceptions.InvalidVerificationCode;
 import np.com.bhattaraiankit.userService.exceptions.UserNotFoundException;
 import np.com.bhattaraiankit.userService.exceptions.VerificationCodeExpires;
@@ -29,14 +34,26 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
     private final RegistrationUserRepo registrationUserRepo;
-
+    private final BloomFilter<String> bloomFilter;
+    private final BloomFilterService bloomFilterService; 
+    
     @Autowired
     JavaMailSender javaMailSender;
+    
     public UserServiceImpl(UserRepo userRepo,
-                            RegistrationUserRepo userRegistrationRepo){
-        
+                           RegistrationUserRepo userRegistrationRepo,
+                           BloomFilterService bloomFilterService)
+    {    
         this.userRepo=userRepo;
         this.registrationUserRepo = userRegistrationRepo;
+        this.bloomFilterService=bloomFilterService;
+
+        this.bloomFilter = new BloomFilter<>(100000, 3, 
+                String::hashCode,
+                s-> s.hashCode()*17,
+                s-> s.hashCode()*31
+                    );
+        this.bloomFilter.setBitSet(bloomFilterService.loadBitSet());
     }
 
     private String sendVerificationCode(String email) throws MessagingException {
@@ -62,31 +79,36 @@ public class UserServiceImpl implements UserService {
         return savedUser.getEmail();
     }
 
+
+
     @Override
     public String  registerUserEmail(String email) throws MessagingException{
-        
+
         RegistrationUser registrationUser;
 
-        if(userRepo.findByEmail(email).isPresent()) 
-            throw new IllegalArgumentException("The user is already registered");
 
-        var u = registrationUserRepo.findByEmail(email);
-
+        if(bloomFilter.mightContains(email))
+            if(userRepo.findByEmail(email).isPresent())
+                throw new IllegalArgumentException("The user is already registered from the bloom filter");
+        
+        var u = registrationUserRepo.findByEmail(email);//if the user has already entered the email.
+                                                        //
         if(u.isPresent()){
             registrationUser = u.get();
             
-        if(registrationUser.isVerified())
+        if(registrationUser.isVerified() || //if the user is already verified. 
+                registrationUser.getExpiry().isAfter(LocalDateTime.now())){//or if the verification code is not expired.
+
             return registrationUser.getEmail();
-            
-            if(registrationUser.getExpiry().isAfter(LocalDateTime.now())){
-                return registrationUser.getEmail();
-            }
+                       }
 
             return refreshVerificationCode(registrationUser);
         }
 
         registrationUser = new RegistrationUser(email,sendVerificationCode(email));
         registrationUserRepo.save(registrationUser);
+        bloomFilter.add(email);
+        bloomFilterService.setBitSet(bloomFilter.getBitSet());
         return email;       
     }
 
@@ -118,7 +140,22 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public RegistrationUserResponse getRegisteredUser(String email) {
+        RegistrationUser u = registrationUserRepo.findByEmail(email).orElseThrow(()-> new UserNotFoundException("The user is not registered"));
+       return new RegistrationUserResponse(u.getId(), u.getEmail(), u.isVerified());
+    }
 
+    @Override
+    public UserResponse addUser(UserRequest requestUser) {
+        
+
+        return null;
+    }
+
+
+    
+     
 
     
 }
