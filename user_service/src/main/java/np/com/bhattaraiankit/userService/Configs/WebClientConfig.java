@@ -11,6 +11,6 @@ public class WebClientConfig {
     @LoadBalanced
     @Bean(name = "authServiceWebClient")
     WebClient.Builder authServiceWebClient(){
-        return WebClient.builder().baseUrl("http://AUTH-SERVICE/");
+        return WebClient.builder().baseUrl("http://AUTH-SERVICE/auth");
     }
 }

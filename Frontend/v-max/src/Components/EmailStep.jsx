@@ -1,30 +1,46 @@
 
 import React,{useState} from "react";
+import { startRegistration } from "../Services/registrationService";
 
 
-const EmailStep = ({onSubmit}) =>{
-    const[email,setEmail]  = useState('');
+const EmailStep = ({email,setEmail,goNextStep,goBackStep}) =>{
     const[error,setError] = useState('');
 
-    const handleSubmit=() => {
+      const handleSubmit= async() => {
         if(!email) {
             setError("Please Enter the email");
             return;
         }
-        onSubmit(email);
+
+        const result = await startRegistration(email);
+
+        if(result.success|true){ // need to remove true(it is for test)
+            setError("");//Clear any previous errors;
+            //setCurrent(2);
+        }
+        else {
+            setError(result.message);
+        }
+        goNextStep();
         setError('');
+    };
+
+    const handleKeyDown = (e) => {
+        if(e.key === "Enter"){
+            handleSubmit();
+        }
     }
+
     return (<div className="step-container">
-        <h2>Enter Your Email</h2>
-        
+        <h2>Enter Your Email</h2>        
         <input 
         type="email"
         placeholder="example123@gmail.com"
         value={email}
         onChange = {(e)=> setEmail(e.target.value)}
+        onKeyDown ={(e) => {handleKeyDown(e)}}
         className="input-field"
         />
-
         <button onClick={handleSubmit} className="next-button">Next</button>
         {error && <p>{error}</p>}
         </div>);

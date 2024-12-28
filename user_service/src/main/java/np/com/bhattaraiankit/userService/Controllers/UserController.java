@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import np.com.bhattaraiankit.userService.DTO.RegistrationUserResponse;
+import np.com.bhattaraiankit.userService.DTO.UserRequest;
+import np.com.bhattaraiankit.userService.DTO.UserResponse;
 import np.com.bhattaraiankit.userService.Services.UserService;
 
 @CrossOrigin("http://localhost:3000")
@@ -43,8 +45,9 @@ public class UserController {
             }
 
     @PostMapping("/addUser")
-    public ResponseEntity<String> addUser(@RequestParam("email") String email){
-        return null;
+    public ResponseEntity<UserResponse> addUser(@RequestBody UserRequest user){
+
+        return new ResponseEntity<UserResponse>(userService.addUser(user),HttpStatus.CREATED);
     }
 
     //Returns the user who has started the registration process...
@@ -52,4 +55,5 @@ public class UserController {
     public ResponseEntity<RegistrationUserResponse> getUser(@RequestParam("email") String email){ 
         return new ResponseEntity<RegistrationUserResponse>(userService.getRegisteredUser(email),HttpStatus.OK);
     }
+     
 }

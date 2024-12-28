@@ -38,8 +38,12 @@ public class SecurityConfig {
     {
 
         httpSecurity.authorizeHttpRequests(auth->{
-            auth.requestMatchers("/auth/register","/auth/getToken","/auth/getUser").permitAll().
-                anyRequest().authenticated();
+            auth.requestMatchers("/auth/getUser",
+                    "/auth/isUserExist",
+                    "/auth/register",
+                    "/auth/getToken").permitAll()
+                .anyRequest().authenticated();
+
         }).csrf(c->c.disable());
 
         return httpSecurity.build();

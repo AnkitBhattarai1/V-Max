@@ -18,7 +18,8 @@ public class UserServiceClient {
    public Optional<RegistrationUserDTO> getUserByEmail(String email){
        String uri = "/user/getUser";
 
-       return Optional.ofNullable(userServiceWebClient.build().get().uri(uri+"?email="+email)
+       return Optional.ofNullable(userServiceWebClient.build()
+           .get().uri(uri+"?email="+email)
            .retrieve()
            .bodyToMono(RegistrationUserDTO.class)           
            .block());

@@ -13,5 +13,6 @@ public interface UserService {
 
     public JWTResponse generateToken(LoginRequest user);
     public void validateToken(String token);
-    public String  signUpUser(SignUpRequest request); 
+    public JWTResponse signUpUser(SignUpRequest request); 
+    public String isUserExist(String email);
 }

@@ -2,9 +2,11 @@ package np.com.bhattaraiankit.auth_service.Controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import np.com.bhattaraiankit.auth_service.DTO.JWTResponse;
@@ -25,21 +27,26 @@ public class AuthenticationController {
     
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody SignUpRequest request){
+    public ResponseEntity<JWTResponse> registerUser(@RequestBody SignUpRequest request){
 
-        String res = userService.signUpUser(request);
-        return new ResponseEntity<String>(res,HttpStatus.CREATED);
+        JWTResponse res = userService.signUpUser(request);
+        return new ResponseEntity<JWTResponse>(res,HttpStatus.CREATED);
     }
 
     @PostMapping("/getToken")
     public  ResponseEntity<JWTResponse> getToken(@RequestBody LoginRequest request){
-        System.out.println("its here");
         return new ResponseEntity<JWTResponse>(userService.generateToken(request),HttpStatus.OK); 
     }
 
+    @GetMapping("/isUserExist")
+    public ResponseEntity<String> isUserExist(@RequestParam("email") String email){
+            System.out.println(userService.isUserExist(email));
+        return new ResponseEntity<String>(userService.isUserExist(email), HttpStatus.OK);
+    }
 
-    public String validate(String token){
-        userService.validateToken(token);
-        return "validated";
+    @GetMapping("/getUser")
+    public String test(){
+        // ResponseEntity<String>(userService.isUserExist(email), HttpStatus.OK);
+    return "done";
     }
 }

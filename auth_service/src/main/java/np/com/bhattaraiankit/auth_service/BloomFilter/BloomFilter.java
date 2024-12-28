@@ -18,8 +18,6 @@ public class BloomFilter<T> {
 
     }
 
-
-
     public void add(T value){
         for(Function<T,Integer> function : hashFunctions)
             bitset.set(Math.abs(function.apply(value)%bitSetSize));

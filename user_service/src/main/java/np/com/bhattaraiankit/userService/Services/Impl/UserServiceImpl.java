@@ -18,6 +18,7 @@ import np.com.bhattaraiankit.userService.DTO.RegistrationUserResponse;
 import np.com.bhattaraiankit.userService.DTO.UserRequest;
 import np.com.bhattaraiankit.userService.DTO.UserResponse;
 import np.com.bhattaraiankit.userService.Models.RegistrationUser;
+import np.com.bhattaraiankit.userService.Models.User;
 import np.com.bhattaraiankit.userService.Repository.RegistrationUserRepo;
 import np.com.bhattaraiankit.userService.Repository.UserRepo;
 import np.com.bhattaraiankit.userService.Services.UserService;
@@ -37,17 +38,20 @@ public class UserServiceImpl implements UserService {
     private final BloomFilter<String> bloomFilter;
     private final BloomFilterService bloomFilterService; 
     
+   private final AuthServiceClient authServiceClient;
+
     @Autowired
     JavaMailSender javaMailSender;
     
     public UserServiceImpl(UserRepo userRepo,
                            RegistrationUserRepo userRegistrationRepo,
-                           BloomFilterService bloomFilterService)
+                           BloomFilterService bloomFilterService,
+                           AuthServiceClient authServiceClient)
     {    
         this.userRepo=userRepo;
         this.registrationUserRepo = userRegistrationRepo;
         this.bloomFilterService=bloomFilterService;
-
+        this.authServiceClient = authServiceClient;
         this.bloomFilter = new BloomFilter<>(100000, 3, 
                 String::hashCode,
                 s-> s.hashCode()*17,
@@ -86,13 +90,12 @@ public class UserServiceImpl implements UserService {
 
         RegistrationUser registrationUser;
 
-
         if(bloomFilter.mightContains(email))
             if(userRepo.findByEmail(email).isPresent())
                 throw new IllegalArgumentException("The user is already registered from the bloom filter");
         
         var u = registrationUserRepo.findByEmail(email);//if the user has already entered the email.
-                                                        //
+                                                        
         if(u.isPresent()){
             registrationUser = u.get();
             
@@ -142,20 +145,42 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public RegistrationUserResponse getRegisteredUser(String email) {
-        RegistrationUser u = registrationUserRepo.findByEmail(email).orElseThrow(()-> new UserNotFoundException("The user is not registered"));
-       return new RegistrationUserResponse(u.getId(), u.getEmail(), u.isVerified());
+      if(bloomFilter.mightContains(email)) { 
+        RegistrationUser u = registrationUserRepo.findByEmail(email)
+            .orElseThrow(()-> new UserNotFoundException("The user is not registered"));
+       
+        return new RegistrationUserResponse(u.getId(), u.getEmail(), u.isVerified());
+        }
+    throw new UserNotFoundException("The user is not registered");
     }
 
     @Override
     public UserResponse addUser(UserRequest requestUser) {
-        
+        if(!(authServiceClient.isUserExist(requestUser.email())
+                    .isPresent()))
+            throw new UserNotFoundException("The user is not registered yet");
 
-        return null;
+        User u = new User();
+        u.setEmail(requestUser.email());
+        u.setUsername(requestUser.email());
+        u.setDob(requestUser.dob());
+        u.setFirst_name(requestUser.first_name());
+        u.setLast_name(requestUser.last_name());
+        u.setMiddle_name(requestUser.middle_name());
+        u.setCreated_at(LocalDateTime.now());   
+        u.setUpdated_at(LocalDateTime.now());
+        u.setProfile_pic_url(null);
+       
+        User registeredUser = userRepo.save(u);
+       UserResponse res = new UserResponse(u.getId(),
+               u.getEmail(),
+               u.getUsername(),
+               "This name in response is to be changed", 
+               u.getCreated_at(),
+               u.getUpdated_at(),
+               u.getDob(),
+               u.getProfile_pic_url()); 
+        return res;
     }
-
-
-    
-     
-
     
 }

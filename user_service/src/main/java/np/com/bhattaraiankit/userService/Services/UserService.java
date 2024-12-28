@@ -20,6 +20,5 @@ public interface UserService  {
     public String verifyUserEmail(String email, String verification_code) throws MessagingException;
     
     public RegistrationUserResponse getRegisteredUser(String email);
-    
     public UserResponse addUser(UserRequest user);
 }

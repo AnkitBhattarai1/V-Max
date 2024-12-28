@@ -1,5 +1,9 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
+import EmailStep from "../Components/EmailStep";
+import PasswordStep from "../Components/PasswordStep";
+import VerificationCodeStep from "../Components/VerificationCodeStep";
 import { startRegistration, verifyCode } from "../Services/registrationService";
 import "../Styles/RegistrationFlow.css";
 
@@ -10,7 +14,8 @@ const RegistrationFlow = () => {
   const [error, setError] = useState(""); // For validation messages
   const navigate = useNavigate(); // For redirecting to the homepage
 
-  const handleEmailSubmit = async () => {
+/*
+    const handleEmailSubmit = async () => {
     if (!email) {
       setError("Please enter your email.");
       return;
@@ -25,7 +30,7 @@ const RegistrationFlow = () => {
       setError(result.message);
     }
   };
-
+*/
   // Handle OTP submission
   const handleOtpSubmit = async () => {
     const otpCode = otp.join(""); // Combine the 6 OTP inputs
@@ -43,7 +48,7 @@ const RegistrationFlow = () => {
           setError(result.message);
   };
 
-  // Handle OTP input change
+    // Handle OTP input change
   const handleOtpChange = (element, index) => {
     if (isNaN(element.value)) return; // Allow only numeric input
     const newOtp = [...otp];
@@ -63,73 +68,33 @@ const RegistrationFlow = () => {
     navigate("/home"); // Redirect to homepage
   };
 
+    const nextStep= () => {
+        setCurrentStep(currentStep+1);
+    }
+
   return (
     <div className="registration-flow">
-      {/* Email Step */}
-      {currentStep === 1 && (
-        <div className="step-container">
-          <h2>Sign Up</h2>
-          <input
-            type="email"
-            placeholder="example123@gmail.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="input-field"
-          />
-          <button onClick={handleEmailSubmit} className="next-button">
-            Next
-          </button>
-        </div>
-      )}
 
+      {/* Email Step */}
+        {currentStep === 1 && <EmailStep    
+            email={email}
+            setEmail={setEmail}
+            goNextStep={()=>{setCurrentStep(currentStep+1)}}
+                />}
+ 
       {/* OTP Step */}
-      {currentStep === 2 && (
-        <div className="step-container">
-          <h2>Verify Your Email</h2>
-          <p>Enter the 6-digit code sent to <strong>{email}</strong>.</p>
-          <div className="otp-container">
-            {otp.map((value, index) => (
-              <input
-                key={index}
-                type="text"
-                maxLength="1"
-                value={value}
-                onChange={(e) => handleOtpChange(e.target, index)}
-                className="otp-input"
+      {currentStep === 2 && 
+    <VerificationCodeStep
+        email={email}
+        nextStep={()=>{setCurrentStep(3)}}
+        prevStep={()=>{setCurrentStep(1)}}
               />
-            ))}
-          </div>
-          <button onClick={handleOtpSubmit} className="submit-button">
-            Verify
-          </button>
-        </div>
-      )}
+      }
 
       {/* Password Step with readonly email */}
-      {currentStep === 3 && (
-        <div className="step-container">
-          <h2>Create Your Password</h2>
-          <p>Set a strong password for <strong>{email}</strong>.</p>
-
-          {/* Email input as readonly */}
-          <input
-            type="email"
-            value={email}
-            readOnly
-            className="input-field readonly-input"
-          />
-
-          <input
-            type="password"
-            placeholder="Enter your password"
-            className="input-field"
-          />
-          <button onClick={handleCompleteRegistration} className="next-button">
-            Complete Registration
-          </button>
-        </div>
-      )}
-
+      {currentStep === 3 && 
+              (<PasswordStep></PasswordStep>)
+      }
       {/* Display Errors */}
       {error && <p className="error">{error}</p>}
     </div>
