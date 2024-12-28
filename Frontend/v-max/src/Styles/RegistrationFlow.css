@@ -1,16 +1,3 @@
-/* Global Styles */
-body {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #141414;
-  color: #e5e5e5;
-}
-
 /* Registration Flow Wrapper */
 .registration-flow {
   display: flex;
@@ -18,8 +5,9 @@ body {
   justify-content: center;
   width: 100%;
   max-width: 500px; /* Increased max-width for a larger container */
-  height: 100%;
+  height: 100vh; /* Full height to ensure centering in viewport */
   padding: 20px;
+  margin: 0 auto; /* Centering horizontally */
 }
 
 /* Step Container */

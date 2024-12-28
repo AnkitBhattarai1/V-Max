@@ -1,18 +1,25 @@
 import React from "react";
-import "../Styles/Navbar.css"; // Import the corresponding CSS
+import { Link } from "react-router-dom";
+import "../Styles/Navbar.css"; 
 
-const Navbar = () => {
+const Navbar = ({ searchTerm, handleSearch }) => {
   return (
     <div className="navbar">
-      {/* V-MAX logo on the left */}
       <div className="logo">V-MAX</div>
-
-      {/* Navigation links centered */}
       <div className="links">
-        <a href="/">Home</a>
-        <a href="/movies">Movies</a>
-        <a href="/tvshows">TV Shows</a>
-        <a href="/mylist">My List</a>
+        <Link to="/">Home</Link>
+        <Link to="/movies">Movies</Link>
+        <Link to="/tvshows">TV Shows</Link>
+        <Link to="/mylist">My List</Link>
+      </div>
+      <div className="search-bar-container">
+        <input
+          type="text"
+          className="search-bar"
+          placeholder="Search for movies or TV shows..."
+          value={searchTerm} // Bind the value of input to searchTerm
+          onChange={handleSearch} // Update the searchTerm when user types
+        />
       </div>
     </div>
   );

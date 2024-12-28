@@ -1,14 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import RegistrationFlow from "./Pages/RegistrationFlow";
-import HomePage from "./Pages/HomePage"; // Your homepage component
+import RegistrationFlow from './Pages/RegistrationFlow';
+import HomePage from "./Pages/HomePage"; // Import HomePage
+import "../src/App.css"
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<RegistrationFlow />} />
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<RegistrationFlow />} />
       </Routes>
     </Router>
   );

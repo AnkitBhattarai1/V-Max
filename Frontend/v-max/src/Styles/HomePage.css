@@ -1,30 +1,70 @@
-/* HomePage Styles */
+
 .homepage {
-    font-family: Arial, sans-serif;
-    background-color: #141414; /* Dark background */
-    color: #fff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* Align items to the start */
+  margin-top: 800px;
+  padding: 20px;
+}
+
+.content {
+  padding: 20px;
+}
+
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #444;
+  padding-bottom: 5px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background-color: #333;
+  padding: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.card .title {
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.no-results {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #888;
+  margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
-  
-  /* Movie Banner Section */
-  .movie-banner {
-    width: 200%; /* Set width to 100% to span the full width */
-    height: 400px; /* Adjust the height for a more rectangular look */
-    position: relative;
-    overflow: hidden;
-    justify-content: center; /* Centers the banner horizontally */
-    align-items: center; /* Centers the banner vertically */
-    margin-top: 20px; /* Optional space between navbar and banner */
+
+  .card {
+    padding: 10px;
   }
-  
-  .movie-banner-image {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    transition: opacity 1s ease-in-out;
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.5rem;
   }
-  
+}
