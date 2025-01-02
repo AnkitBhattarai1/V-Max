@@ -1,21 +1,31 @@
+
 server:
   port: 9090
 
 spring:
   application:
     name: API-GATEWAY
-    
+
   cloud:
     gateway:
-        routes:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: 
+              - "http://localhost:3000"
+            allowedMethods: '*'
+            allowedHeaders: '*'
+            allowCredentials: true
+      
+      routes:
 
-        - id: AUTH-SERVICE-REGISTER
-          uri: lb://AUTH-SERVICE
+        - id: auth-service-route
+          uri: lb://auth-service
           predicates:
-          - Path=/auth/**
+            - Path=/auth/**
 
-        - id: USER-SERVICE-REGISTER
-          uri: lb://USER-SERVICE
-          predicates: 
-          - Path=/user/**
+        - id: user-service-route
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
 

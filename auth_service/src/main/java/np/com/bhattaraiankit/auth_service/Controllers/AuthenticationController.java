@@ -15,7 +15,7 @@ import np.com.bhattaraiankit.auth_service.DTO.SignUpRequest;
 import np.com.bhattaraiankit.auth_service.Services.UserService;
 /**
  * AuthenticationController
- */
+*/
 @RestController
 @RequestMapping(path="/auth")
 public class AuthenticationController {
@@ -32,6 +32,7 @@ public class AuthenticationController {
         JWTResponse res = userService.signUpUser(request);
         return new ResponseEntity<JWTResponse>(res,HttpStatus.CREATED);
     }
+    
 
     @PostMapping("/getToken")
     public  ResponseEntity<JWTResponse> getToken(@RequestBody LoginRequest request){
@@ -45,8 +46,18 @@ public class AuthenticationController {
     }
 
     @GetMapping("/getUser")
-    public String test(){
+    public String test33(){
         // ResponseEntity<String>(userService.isUserExist(email), HttpStatus.OK);
     return "done";
+    }
+
+    @GetMapping("/test")
+    public String test(){
+        return "test successful";
+    }
+
+    @PostMapping("/test2")
+    public String test2(){
+        return "test2 successful";
     }
 }

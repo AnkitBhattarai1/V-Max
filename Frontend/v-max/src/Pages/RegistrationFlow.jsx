@@ -31,7 +31,8 @@ const RegistrationFlow = () => {
     }
   };
 */
-  // Handle OTP submission
+
+        {/*// Handle OTP submission
   const handleOtpSubmit = async () => {
     const otpCode = otp.join(""); // Combine the 6 OTP inputs
     if (otpCode.length < 6) {
@@ -47,7 +48,7 @@ const RegistrationFlow = () => {
       else
           setError(result.message);
   };
-
+*/}
     // Handle OTP input change
   const handleOtpChange = (element, index) => {
     if (isNaN(element.value)) return; // Allow only numeric input

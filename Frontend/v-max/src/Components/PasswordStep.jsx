@@ -1,28 +1,26 @@
 
 import React,{useState} from "react";
-
+import { registerUser } from "../Services/registrationService";
 const PasswordStep = ({email,onSubmit})=>{
 
-    const[password,setPassword] = useState('');
     const[error, setError] = useState('');
-
+    
     const [user,setUser] = useState({
         email:email,
+        password:'',
         first_name:'',
         last_name:'',
         middle_name:'',
         dob:Date.now()
-    })
+    });
 
-    const handleSubmit = ()=>{
-        if(!password) 
-        {
-            setError("Please Enter the password");
-            return;
-        }
-        onSubmit(password);
-        setError('');
-    }
+    const handleSubmit =  async ()=>{
+
+        console.log("ankit bhattari");
+        const res = await registerUser(user);
+
+        console.log(res);
+    };
 
 
   const handleChange = (key, value) => {
@@ -77,7 +75,7 @@ const PasswordStep = ({email,onSubmit})=>{
         onChange={(e) => handleChange('dob', e.target.value)}
       />
             <button className="submit-button"
-            onSubmit={()=>{}}>submit</button>
+            onClick={handleSubmit}>submit</button>
             </div>
         );
 }

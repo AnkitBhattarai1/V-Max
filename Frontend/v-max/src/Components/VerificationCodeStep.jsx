@@ -9,9 +9,6 @@ const VerificationCodeStep = ({email,nextStep,prevStep})=>{
     const [resendTimer, setResendTimer] = useState(60);
     const[isSubmitting, setIsSubmitting] = useState(false);
 
-
-
-
     const handleChange=(element,index) => {
          if (isNaN(element.value)) return; // Only allow numbers
         const newOtp = [...otp];
@@ -33,7 +30,7 @@ const VerificationCodeStep = ({email,nextStep,prevStep})=>{
             }
         const result = await verifyCode(email,otpCode);
         
-        if(result.success | true){
+        if(result.success){
             setError("");
             nextStep();     
         }

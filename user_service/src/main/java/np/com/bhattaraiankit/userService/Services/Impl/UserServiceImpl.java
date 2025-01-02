@@ -8,6 +8,7 @@ import java.util.Random;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -99,11 +100,12 @@ public class UserServiceImpl implements UserService {
         if(u.isPresent()){
             registrationUser = u.get();
             
-        if(registrationUser.isVerified() || //if the user is already verified. 
-                registrationUser.getExpiry().isAfter(LocalDateTime.now())){//or if the verification code is not expired.
+        if(registrationUser.isVerified())
+                return registrationUser.getEmail();//if the user is already verified. 
 
+                if(registrationUser.getExpiry().isAfter(LocalDateTime.now()))//or if the verification code is not expired.
             return registrationUser.getEmail();
-                       }
+                       
 
             return refreshVerificationCode(registrationUser);
         }
@@ -145,7 +147,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public RegistrationUserResponse getRegisteredUser(String email) {
-      if(bloomFilter.mightContains(email)) { 
+
+        if(bloomFilter.mightContains(email)) { 
         RegistrationUser u = registrationUserRepo.findByEmail(email)
             .orElseThrow(()-> new UserNotFoundException("The user is not registered"));
        
@@ -155,7 +158,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserResponse addUser(UserRequest requestUser) {
+       
         if(!(authServiceClient.isUserExist(requestUser.email())
                     .isPresent()))
             throw new UserNotFoundException("The user is not registered yet");
@@ -172,7 +177,8 @@ public class UserServiceImpl implements UserService {
         u.setProfile_pic_url(null);
        
         User registeredUser = userRepo.save(u);
-       UserResponse res = new UserResponse(u.getId(),
+    
+        UserResponse res = new UserResponse(u.getId(),
                u.getEmail(),
                u.getUsername(),
                "This name in response is to be changed", 
@@ -180,6 +186,7 @@ public class UserServiceImpl implements UserService {
                u.getUpdated_at(),
                u.getDob(),
                u.getProfile_pic_url()); 
+       registrationUserRepo.deleteFromEmail(u.getEmail());  
         return res;
     }
     

@@ -1,4 +1,5 @@
 package np.com.bhattaraiankit.auth_service.Services.Impl;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +86,7 @@ public class UserServiceImpl implements UserService {
         u.setEmail(registeredUser.email());
         u.setPassword(passwordEncoder.encode(request.password()));
         u.setUserName(request.email()); 
-        u.setAuthorities(null);
+        u.setAuthorities(new HashSet<>());
         bloomFilter.add(registeredUser.email());
         bloomFilterService.setBitSet(bloomFilter.getBitSet());
         userRepo.save(u);

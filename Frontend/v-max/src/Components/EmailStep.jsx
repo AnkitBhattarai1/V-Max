@@ -1,12 +1,13 @@
 
 import React,{useState} from "react";
-import { startRegistration } from "../Services/registrationService";
+import { startRegistration,test,registerUser} from "../Services/registrationService";
 
 
 const EmailStep = ({email,setEmail,goNextStep,goBackStep}) =>{
     const[error,setError] = useState('');
 
-      const handleSubmit= async() => {
+
+    const handleSubmit= async() => {
         if(!email) {
             setError("Please Enter the email");
             return;
@@ -14,23 +15,26 @@ const EmailStep = ({email,setEmail,goNextStep,goBackStep}) =>{
 
         const result = await startRegistration(email);
 
-        if(result.success|true){ // need to remove true(it is for test)
+        if(result.success){ // need to remove true(it is for test)
             setError("");//Clear any previous errors;
-            //setCurrent(2);
+            //setCurrent(2);    
+        goNextStep();
         }
         else {
             setError(result.message);
         }
-        goNextStep();
         setError('');
     };
 
+   
     const handleKeyDown = (e) => {
         if(e.key === "Enter"){
             handleSubmit();
         }
     }
-
+const handletest = () => {
+   registerUser(); 
+}
     return (<div className="step-container">
         <h2>Enter Your Email</h2>        
         <input 

@@ -4,7 +4,6 @@ import jakarta.mail.MessagingException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,9 +16,8 @@ import np.com.bhattaraiankit.userService.DTO.UserRequest;
 import np.com.bhattaraiankit.userService.DTO.UserResponse;
 import np.com.bhattaraiankit.userService.Services.UserService;
 
-@CrossOrigin("http://localhost:3000")
 @RestController
-@RequestMapping("/user")
+@RequestMapping(path="/user")
 public class UserController {
 
     private final UserService userService;
@@ -46,7 +44,6 @@ public class UserController {
 
     @PostMapping("/addUser")
     public ResponseEntity<UserResponse> addUser(@RequestBody UserRequest user){
-
         return new ResponseEntity<UserResponse>(userService.addUser(user),HttpStatus.CREATED);
     }
 
@@ -55,5 +52,14 @@ public class UserController {
     public ResponseEntity<RegistrationUserResponse> getUser(@RequestParam("email") String email){ 
         return new ResponseEntity<RegistrationUserResponse>(userService.getRegisteredUser(email),HttpStatus.OK);
     }
-     
+
+    @GetMapping("/test")
+    public String test(){
+        return "test successful";
+    }
+
+    @PostMapping("/test2")
+    public String test2(){
+        return "test2 successful";
+    }
 }
