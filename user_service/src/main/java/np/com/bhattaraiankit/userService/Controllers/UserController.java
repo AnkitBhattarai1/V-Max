@@ -52,14 +52,4 @@ public class UserController {
     public ResponseEntity<RegistrationUserResponse> getUser(@RequestParam("email") String email){ 
         return new ResponseEntity<RegistrationUserResponse>(userService.getRegisteredUser(email),HttpStatus.OK);
     }
-
-    @GetMapping("/test")
-    public String test(){
-        return "test successful";
-    }
-
-    @PostMapping("/test2")
-    public String test2(){
-        return "test2 successful";
-    }
 }
