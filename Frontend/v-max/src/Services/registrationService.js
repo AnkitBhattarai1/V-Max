@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import { BASE_URL } from '../Utils/constants';
+
 
 /**
  * Sends a POST request to the registration API to start the registration process.
@@ -14,6 +14,9 @@ import { BASE_URL } from '../Utils/constants';
  * - Returning success or failure based on the server response.
  * - Gracefully handling errors (e.g., network issues or server errors).
  */
+
+
+BASE_URL='http://localhost:9090'
 
 export const startRegistration = async (email) => {
   try {

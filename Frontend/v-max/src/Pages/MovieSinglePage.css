@@ -1,0 +1,101 @@
+#details h4{
+    color: rgb(214, 43, 43);
+    font-size: 35px;
+    padding: 10px;
+    font-family: Courier, monospace;
+    font-weight:bold;
+}
+
+#details h5{
+    color: gray;
+    font-size: 18px;
+    padding: 10px;
+    font-family: Courier, monospace;
+    font-weight:bold;
+}
+
+#details span{
+    color: rgb(74, 73, 73);
+    font-size: 18px;
+    font-family: Courier, monospace;
+    font-weight:bold;
+    
+}
+
+#details p{
+    color: gray;
+    font-size: 18px;
+    padding: 10px;
+    font-family: Courier, monospace;
+    font-weight:bold;
+}
+
+#details span{
+    color: white;
+    font-size: 18px;
+}
+#button {
+    background-color: rgb(61, 61, 220);
+    width: 25%;
+    padding: 10px;
+}
+
+#movieDetails h1{
+    color: rgb(214, 43, 43);
+    font-size: 18px;
+    padding: 10px;
+    font-family: Courier, monospace;
+    font-weight:bold;
+
+}
+#movieDetails p{
+    color: gray;
+    font-size: 18px;
+    padding: 10px;
+    font-family: Courier, monospace;
+    font-weight:bold;
+}
+#Star {
+    width: 80px;
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+
+@media only screen and (max-width: 768px) {
+  #Maincontainer{
+    padding-left: 0px;
+  }
+  #img iframe{
+    height: auto;
+  }
+  #details button{
+    background-color: rgb(61, 61, 220);
+ 
+    width: "600px";
+    height: "20px";
+    padding: 40px;
+    font-size: "4px";
+    /* border: 2px solid red; */
+}
+ 
+}
+
+@media only screen and (max-width: 480px) {
+  #Maincontainer{
+    padding-left: 0px;
+  }
+  #img iframe{
+    height: auto;
+  }
+  #details button{
+    background-color: rgb(61, 61, 220);
+    width: "600px";
+    padding: 10px;
+    font-size: "4px";
+}
+ 
+
+}

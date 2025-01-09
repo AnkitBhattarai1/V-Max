@@ -1,0 +1,156 @@
+
+ /* .hidden-text{
+    visibility: hidden; 
+  font-family: 'Chakra', sans-serif; 
+  transition: visibility 0.1s ease; 
+} 
+
+
+.hidden-text:hover {
+  visibility: visible; 
+  
+} */
+body{
+margin: 0px;
+padding: 0px;
+}
+
+  .Movies{
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    grid-gap: 20px;
+    padding: 10px;
+    /* margin-top: -120px; */
+
+   
+  }
+  
+  
+  
+  .movie_Card{
+   
+padding: 5px;
+box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+overflow: hidden;
+margin-top: 30px;
+  }
+  .zoom-image{
+    width: 100%; /* Set the width of the image */
+    transition: transform 0.5s ease-in-out; /* Define a smooth transition effect for the transform property */
+  }
+  .zoom-image:hover {
+    transform: scale(1.3); /* Apply a scale transformation on hover to create the zoom effect */
+  }
+
+#navbox NavItem{
+  @media (max-width: 768px) {
+  font-size: x-small;
+  
+  #mainDiv{
+    padding-left: 0%;
+  }
+   
+  }
+
+  @media (max-width: 550px) {
+    #mainDiv{
+      border: 2px solid pink;
+      padding-left: 0%;
+    }
+  }
+
+}
+ 
+#Heading {
+  margin-left: 2%;
+  margin-top: 5%;
+  z-index: 5;
+  position: absolute;
+}
+
+#Heading h1 {
+  color: #106ef1;
+  font-size: 50px;
+  margin-bottom: 10px;
+  font-weight: bolder;
+  padding: 10px;
+  font-family: Courier, monospace;
+}
+
+#Heading p {
+  color: #f2422b;
+  font-size: 18px;
+  font-weight: bolder;
+  padding: 10px;
+  font-family: Courier, monospace;
+}
+
+#Heading img {
+  opacity: 0.7; /* Adjust the value (0.5) for the desired level of transparency */
+  max-width: 100%;
+  height: auto;
+}
+
+#Heading h6 {
+  font-size: 18px;
+  color: white;
+  font-weight: bolder;
+}
+
+/* Media queries for responsive design */
+
+@media only screen and (max-width: 768px) {
+  #mainDiv{
+    /* border: 1px solid red; */
+    padding-left: 0px;
+  }
+
+
+  #Heading h1 {
+    font-size: 40px; /* Adjust font size for smaller screens */
+  }
+  #Heading img {
+    width: 30%;
+  }
+
+  #Heading p {
+    font-size: 8px; /* Adjust font size for smaller screens */
+  }
+
+  #Heading h6 {
+    font-size: 12px; /* Adjust font size for smaller screens */
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  #Heading h1 {
+    font-size: 12px; /* Adjust font size for even smaller screens */
+  }
+  #Heading img {
+    width: 25%;
+  }
+
+  #Heading p {
+    font-size: 4px; /* Adjust font size for even smaller screens */
+  }
+
+  #Heading h6 {
+    font-size: 8px; /* Adjust font size for even smaller screens */
+  }
+}
+
+
+
+
+  /* .details{
+    visibility: hidden; 
+    font-family: 'Chakra', sans-serif; 
+    transition: visibility 0.1s ease; 
+  }
+
+  .details:hover{
+    visibility: visible;
+    color: white;
+  } */
+
+  
