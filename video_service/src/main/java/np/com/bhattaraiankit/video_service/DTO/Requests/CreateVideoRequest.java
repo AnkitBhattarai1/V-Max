@@ -7,8 +7,6 @@ import np.com.bhattaraiankit.video_service.Models.Video.VideoType;
 public record CreateVideoRequest(
             String title, 
             String description, 
-            String originalVideoUrl,
-            String thumbnailUrl,
             String trailerUrl,
             LocalDate releaseDate,
             int duration ,
@@ -17,4 +15,4 @@ public record CreateVideoRequest(
             String language,
             String metadata
         ) {
-}
+    }

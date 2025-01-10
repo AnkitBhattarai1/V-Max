@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import np.com.bhattaraiankit.video_service.Models.Video;
 
 @Repository
-public interface VideoRepo extends JpaRepository<Video,String>{ 
+public interface MovieRepo extends JpaRepository<Video,String> {
 
-    }
+    
+ }

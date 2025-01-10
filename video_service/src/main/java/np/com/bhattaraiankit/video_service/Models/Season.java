@@ -14,7 +14,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 import org.hibernate.annotations.UuidGenerator;
-import org.springframework.http.HttpStatus.Series;
 
 @Entity
 public class Season {
@@ -35,7 +34,7 @@ public class Season {
     @ManyToMany
     @JoinTable(
     name = "series_genre_mapping",
-    joinColumns = @JoinColumn(name="series_id"),
+    joinColumns = @JoinColumn(name="season_id"),
     inverseJoinColumns = @JoinColumn(name="genre_id")
     )
     private List<Genre> genres;

@@ -68,12 +68,45 @@ public enum VideoStatus {
     public void setDuration(int duration){this.duration=duration;}
     public void setVideoType(VideoType videoType){this.type=videoType;}//representing if it is video of movie,series,or etc.
     public void setAgeRating(String ageRating){this.ageRating=ageRating;}
+    public void setLanguage(String language){this.language=language;}
     public void setVideoStatus(VideoStatus status){this.status=status;}
     public void setMetaData(String metadata){this.metadata=metadata;}
 
     //Getters
     public String getTitle(){return this.title;}
     public String getDescription(){return this.description;}
-
+    public String getId() {
+        return id;
+    }
+    public String getOriginalVideoUrl() {
+        return originalVideoUrl;
+    }
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+    public String getTrailerUrl() {
+        return trailerUrl;
+    }
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+    public int getDuration() {
+        return duration;
+    }
+    public VideoType getType() {
+        return type;
+    }
+    public String getAgeRating() {
+        return ageRating;
+    }
+    public String getLanguage() {
+        return language;
+    }
+    public VideoStatus getStatus() {
+        return status;
+    }
+    public String getMetadata() {
+        return metadata;
+    }
 }
 

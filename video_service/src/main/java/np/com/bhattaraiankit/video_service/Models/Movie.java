@@ -38,7 +38,7 @@ public class Movie {
     )
     private Set<Genre> genres;  // Many-to-Many relationship with Genre.
 
-    // Getters and Setters
+    public Movie(){}
 
     public String getId(){return this.id;}
     public Video getVideo(){return this.video;}
@@ -46,6 +46,28 @@ public class Movie {
     public String getCase(){return this.cast;}
     public String getMetaData(){return this.metadata;}
     public Set<Genre> getGenre(){return this.genres;}
+
+
+    public void setVideo(Video video) {
+        this.video = video;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public void setCast(String cast) {
+        this.cast = cast;
+    }
+
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
+    }
+
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
+    }
+
 
 
 }

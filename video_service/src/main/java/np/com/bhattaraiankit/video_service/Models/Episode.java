@@ -1,6 +1,4 @@
 package np.com.bhattaraiankit.video_service.Models;
-
-
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
