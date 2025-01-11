@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService {
         UserResponse res = new UserResponse(u.getId(),
                u.getEmail(),
                u.getUsername(),
-               "This name in response is to be changed", 
+               u.getFirst_name()+" " + u.getMiddle_name()+" "+u.getLast_name()+" ", 
                u.getCreated_at(),
                u.getUpdated_at(),
                u.getDob(),

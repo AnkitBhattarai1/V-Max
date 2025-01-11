@@ -1,12 +1,12 @@
 package np.com.bhattaraiankit.video_service.Services.Impl;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import np.com.bhattaraiankit.video_service.Models.Genre;
 import np.com.bhattaraiankit.video_service.Repository.GenreRepo;
 import np.com.bhattaraiankit.video_service.Services.GenreService;
 
-@Repository
+@Service
 public class GenreServiceImpl implements GenreService{
 
     private final GenreRepo genreRepo;

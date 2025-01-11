@@ -17,7 +17,10 @@ public class Genre {
     private String name;
 
     public Genre(String name){this.name=name;}
-
+    public Genre(){}
     public  String getId(){return this.id;}
     public String getName(){return this.name;}
+
+
+    public void setName(String name){this.name=name;}
 }

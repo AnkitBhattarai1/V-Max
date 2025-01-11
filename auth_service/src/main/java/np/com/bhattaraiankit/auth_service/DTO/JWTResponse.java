@@ -5,7 +5,9 @@ import java.util.List;
   * JWTResponse
   */
 
-public record JWTResponse(String token, String username, List<String> roles) {
+public record JWTResponse(String token, 
+        String username,
+        List<String> roles) {
 
     private static final String TYPE = "Bearer";
 

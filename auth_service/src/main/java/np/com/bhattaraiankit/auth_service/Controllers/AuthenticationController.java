@@ -45,19 +45,5 @@ public class AuthenticationController {
         return new ResponseEntity<String>(userService.isUserExist(email), HttpStatus.OK);
     }
 
-    @GetMapping("/getUser")
-    public String test33(){
-        // ResponseEntity<String>(userService.isUserExist(email), HttpStatus.OK);
-    return "done";
-    }
 
-    @GetMapping("/test")
-    public String test(){
-        return "test successful";
-    }
-
-    @PostMapping("/test2")
-    public String test2(){
-        return "test2 successful";
-    }
 }

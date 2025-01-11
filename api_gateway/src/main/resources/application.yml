@@ -1,4 +1,3 @@
-
 server:
   port: 9090
 
@@ -12,10 +11,10 @@ spring:
         corsConfigurations:
           '[/**]':
             allowedOrigins: 
-              - "http://localhost:3000"
+              - '*'
             allowedMethods: '*'
             allowedHeaders: '*'
-            allowCredentials: true
+            allowCredentials: false
       
       routes:
 
@@ -29,3 +28,15 @@ spring:
           predicates:
             - Path=/user/**
 
+        - id: video-service-route
+          uri: lb://video-service
+          predicates:
+            - Path=/video/**
+            - Path=/episodes/**
+            - Path=/series/**
+            - Path=/seasons/**
+
+        - id: rating_and_recommendation-service-route
+          uri: lb://rating_and_recommendation-service
+          predicates:
+            - Path=/rating/**

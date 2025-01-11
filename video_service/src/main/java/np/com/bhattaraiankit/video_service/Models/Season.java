@@ -8,8 +8,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
@@ -31,16 +29,58 @@ public class Season {
 
     private String metadata;
 
-    @ManyToMany
-    @JoinTable(
-    name = "series_genre_mapping",
-    joinColumns = @JoinColumn(name="season_id"),
-    inverseJoinColumns = @JoinColumn(name="genre_id")
-    )
-    private List<Genre> genres;
 
     @OneToMany(mappedBy = "season", cascade = CascadeType.ALL)
     private List<Episode> episodes;
 
-    // Getters and Setters
+    public String getId() {
+        return id;
+    }
+
+    public Series getSeries() {
+        return series;
+    }
+
+    public int getSeasonNumber() {
+        return seasonNumber;
+    }
+
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+
+    public String getMetadata() {
+        return metadata;
+    }
+
+
+    public List<Episode> getEpisodes() {
+        return episodes;
+    }
+
+
+    public void setSeries(Series series) {
+        this.series = series;
+    }
+
+    public void setSeasonNumber(int seasonNumber) {
+        this.seasonNumber = seasonNumber;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
+    }
+
+    public void setEpisodes(List<Episode> episodes) {
+        this.episodes = episodes;
+    }
+
+
+
+
+
 }

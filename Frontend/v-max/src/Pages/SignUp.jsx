@@ -1,4 +1,6 @@
 import React from 'react';
+import { registerUser, startRegistration, verifyCode } from '../Services/registrationService';
+
 import {
   FormControl,
   FormLabel,
@@ -8,22 +10,20 @@ import {
   Heading,
   useColorModeValue,
   VStack,
-  Checkbox,
-  Link,
   Image,
   Flex,
   Box,
   HStack
 } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
-import { postSignup } from '../Redux/Auth/Action';
 import { useToast } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,useLocation} from 'react-router-dom';
 
 const initialState = {
-  Name: '',
-  mobile_Number: '',
-  age: '',
+  first_name: '',
+  last_name:'',
+  middle_name:'',
+  dob: '',
   email: '',
   password: '',
   verificationCode: Array(6).fill('') // Array to store 6 digits
@@ -32,10 +32,10 @@ const initialState = {
 export const SignUp = () => {
   const [user, setUser] = React.useState(initialState);
   const [step, setStep] = React.useState(1); // Track the current step
-  const [generatedCode, setGeneratedCode] = React.useState(null);
   const dispatch = useDispatch();
   const toast = useToast();
   const navigate = useNavigate();
+ const location = useLocation(); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +55,7 @@ export const SignUp = () => {
     }
   };
 
-  const handleDetailsSubmit = () => {
+  const handleDetailsSubmit = async () => {
     if ( user.email === '') {
       toast({
         position: 'top',
@@ -70,57 +70,71 @@ export const SignUp = () => {
     if (!user.email.includes('@gmail.com')) {
       toast({
         position: 'top',
+        
         isClosable: true,
         duration: 2000,
         status: 'error',
         render: () => <Box color="white" bg="red.500" p="20px">Email must be a valid Gmail address</Box>
-      });
-      
-      return;
-      
+      });      
+      return;      
     }
 
-    // Simulate sending a verification code
-    const code = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit code
-    setGeneratedCode(code);
-    console.log('Verification Code:', code); // For testing; remove in production
+      const result = await startRegistration(user.email);
 
+      if(result.success){
+     toast({
+        position: 'top',   
+        isClosable: true,
+        duration: 2000,
+        status: 'error',
+        render: () => <Box color="white" bg="green.500" p="20px">Verification Code sent successful</Box>
+      });  
+        setStep(2); // Move to verification step
+        }
+      
+      else{
     toast({
-      position: 'top',
-      isClosable: true,
-      duration: 2000,
-      status: 'info',
-      render: () => <Box color="white" bg="blue.500" p="20px">Verification code sent to your email!</Box>
-    });
+        position: 'top',    
+        isClosable: true,
+        duration: 2000,
+        status: 'error',
+        render: () => <Box color="white" bg="red.500" p="20px">Failed to send verification code</Box>
+    });  
+      }
+      };
 
-    setStep(2); // Move to verification step
-  };
+  const handleCodeSubmit = async () => {
 
-  const handleCodeSubmit = () => {
-    if (user.verificationCode.join('').length === 6) {
-      // Bypass verification check
-      toast({
+      if(!(user.verificationCode.length === 6))
+      {toast({
+        position: 'top',
+        isClosable: true,
+        duration: 2000,
+        status: 'error',
+        render: () => <Box color="white" bg="red.500" p="20px">The code must be 6 digits</Box>
+      });
+          return;
+      }
+
+        const result = await verifyCode(user.email, user.verificationCode.join('')); 
+
+      if(result.success){    
+        toast({
         position: 'top',
         isClosable: true,
         duration: 2000,
         status: 'success',
         render: () => <Box color="white" bg="green.500" p="20px">Verification successful!</Box>
       });
-      setStep(3); // Move to set password step
-    } else {
-      toast({
-        position: 'top',
-        isClosable: true,
-        duration: 2000,
-        status: 'error',
-        render: () => <Box color="white" bg="red.500" p="20px">Invalid verification code!</Box>
-      });
-    }
+            setStep(3); 
+        }
+        // Move to set password step
   };
 
-  const handlePasswordSubmit = (e) => {
+  const handlePasswordSubmit =  async (e) => {
     e.preventDefault();
-    if (user.password === '') {
+
+      if (user.password === '') {
       toast({
         position: 'top',
         isClosable: true,
@@ -131,9 +145,13 @@ export const SignUp = () => {
       return;
     }
 
-    dispatch(postSignup(user));
+    //dispatch(postSignup(user));
 
-    toast({
+
+      const result = await registerUser(user);  
+
+    if(result.success){
+      toast({
       position: 'top',
       isClosable: true,
       duration: 2000,
@@ -146,7 +164,8 @@ export const SignUp = () => {
     });
 
     setUser(initialState);
-    navigate('/Login');
+    navigate('/');
+  }
   };
 
   return (
@@ -235,17 +254,17 @@ export const SignUp = () => {
                 <>
                   <FormControl id="FirstName">
                     <FormLabel>First Name</FormLabel>
-                    <Input rounded="md" type="text" placeholder="Enter your First Name" name="firstName" value={user.firstName} onChange={handleChange} />
+                    <Input rounded="md" type="text" placeholder="Enter your First Name" name="first_name" value={user.first_name} onChange={handleChange} />
                   </FormControl>
 
                   <FormControl id="MiddleName">
                     <FormLabel>Middle Name</FormLabel>
-                    <Input rounded="md" type="text" placeholder="Enter your Middle Name" name="middleName" value={user.middleName} onChange={handleChange} />
+                    <Input rounded="md" type="text" placeholder="Enter your Middle Name" name="middle_name" value={user.middle_name} onChange={handleChange} />
                   </FormControl>
 
                   <FormControl id="LastName">
                     <FormLabel>Last Name</FormLabel>
-                    <Input rounded="md" type="text" placeholder="Enter your Last Name" name="lastName" value={user.lastName} onChange={handleChange} />
+                    <Input rounded="md" type="text" placeholder="Enter your Last Name" name="last_name" value={user.last_name} onChange={handleChange} />
                   </FormControl>
 
                   <FormControl id="Email">

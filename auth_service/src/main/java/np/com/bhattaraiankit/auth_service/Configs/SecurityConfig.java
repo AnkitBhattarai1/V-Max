@@ -61,8 +61,8 @@ public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws
         .csrf(c->c.disable())
         .authorizeHttpRequests(auth->{
             auth.requestMatchers(HttpMethod.OPTIONS).permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/getToken","/auth/test2").permitAll()
-                .requestMatchers(HttpMethod.GET, "/auth/getUser", "/auth/isUserExist","/auth/test").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/getToken").permitAll()
+                .requestMatchers(HttpMethod.GET, "/auth/getUser", "/auth/isUserExist").permitAll()
                 .anyRequest().authenticated();
         });
 

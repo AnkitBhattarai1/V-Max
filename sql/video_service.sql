@@ -18,19 +18,19 @@ CREATE TABLE video (
 
 
 CREATE TABLE series (
-    id VARCHAR(36) PRIMARY KEY,                 -- Unique identifier for the series.
-    title JSON,                            -- Multilingual series title.
-    description JSON,                      -- Multilingual description of the series.
-    total_seasons INT,                     -- Total number of seasons in the series.
-    ongoing BOOLEAN,                       -- Whether the series is ongoing.
-    thumbnail_url VARCHAR(512),            -- URL to the series thumbnail.
-    metadata JSON                          -- Flexible metadata for the series.
+    id VARCHAR(36) PRIMARY KEY, 
+    title JSON,                
+    description JSON,         
+    total_seasons INT,       
+    ongoing BOOLEAN,        
+    thumbnail_url VARCHAR(512),            
+    metadata JSON                          
 );
 
 CREATE TABLE season (
-    id VARCHAR(36) PRIMARY KEY,                -- Unique identifier for the season.
-    series_id VARCHAR(36),                     -- Foreign key to the series table.
-    season_number INT,                    -- The season number (e.g., 1, 2, 3).
+    id VARCHAR(36) PRIMARY KEY,           
+    series_id VARCHAR(36),               
+    season_number INT,                  
     release_date DATE,                    -- Release date of the season.
     metadata JSON,                        -- Flexible metadata for the season.
 

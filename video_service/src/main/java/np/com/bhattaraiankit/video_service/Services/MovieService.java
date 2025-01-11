@@ -10,8 +10,7 @@ import np.com.bhattaraiankit.video_service.DTO.Responses.MovieResponse;
 public interface MovieService {
 
     public MovieResponse getMovieById(String id);
-    public List<MovieResponse> getMoviesByIds(List<String> ids);
-    
+    public List<MovieResponse> getMoviesByIds(List<String> ids); 
     public MovieResponse createMovie(CreateMovieRequest movieRequest);
     
     

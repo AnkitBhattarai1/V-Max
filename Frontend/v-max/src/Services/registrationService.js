@@ -16,10 +16,13 @@ import axios from 'axios';
  */
 
 
-BASE_URL='http://localhost:9090'
+const BASE_URL='http://192.168.1.65:9090'
+
 
 export const startRegistration = async (email) => {
-  try {
+  
+    console.log(email);
+    try {
     // Send POST request to the backend with the email as plain text
     const response = await axios.post(
       BASE_URL+'/user/startReg',
@@ -54,7 +57,8 @@ export const startRegistration = async (email) => {
 
 export const verifyCode = async (email,verificationCode) =>{
     //Send post request to backend with the email and code 
-   try{ 
+   console.log(verificationCode);
+    try{ 
     const response = await axios.post(
         BASE_URL+'/user/verify',
         null,
@@ -66,7 +70,7 @@ export const verifyCode = async (email,verificationCode) =>{
         }
     );
     //Check the response status and return accordingly  
-    if(response.status===201)
+    if(response.status === 200)
         return {success:true};
     else {
         return {success:false, message:response.data};
@@ -78,22 +82,15 @@ export const verifyCode = async (email,verificationCode) =>{
     }
 } 
 
-export const registerUser = async (user) => {
-/*    
-    test();
-    const data ={
-        email:"ankit",
-        password:"hello1234"
-    }
-    const res1 = await axios.post('http://localhost:8085/auth/register',data);
-    //console.log(res1);
+
+export const registerUser = async(user) =>{
+
+    try{
 
 
+    // Step 1: Register in Auth Service
 
-    */
-        try {
-        // First API call to register the user
-        const res1 = await axios.post(
+    const res1 = await axios.post(
             `${BASE_URL}/auth/register`,
             {
                 email: user.email,
@@ -105,9 +102,10 @@ export const registerUser = async (user) => {
                 },
             }
         );
-        console.log(res1);
 
-        // Second API call to add user details
+
+    localStorage.setItem("jwtToken",res1.token);
+   
         const res2 = await axios.post(
             `${BASE_URL}/user/addUser`,
             {
@@ -115,7 +113,7 @@ export const registerUser = async (user) => {
                 first_name: user.first_name,
                 last_name: user.last_name,
                 middle_name: user.middle_name,
-                dob: ((user.dob).toISOString())
+                dob: `${user.dob}T00:00:00`,
             },
             {
                 headers: {
@@ -123,27 +121,16 @@ export const registerUser = async (user) => {
                 },
             }
         );
-        console.log(res2);
-    } catch (e) {
-        console.error("Error occurred:", e.response || e);
+
+
+        // Step 2: Add User in User Servic
+          if(res1.status===201 && res2.status===201)
+        return { success: true };
+    }
+
+
+catch(e){
+    console.log(e);
+    return {success: false};
     }
 };
-
-
-export const test = async () => {
-   const res1 = await axios.get(
-            `${BASE_URL}/auth/test`)
-
-    console.log(res1);
-   const res2 = await axios.get(
-            `${BASE_URL}/user/test`)
-console.log(res2);
-
-   const res3 = await axios.post(
-            `${BASE_URL}/auth/test2`)
-    console.log(res3);
-
-   const res4= await axios.post(
-            `${BASE_URL}/user/test2`)
-    console.log(res4);
-}

@@ -41,5 +41,94 @@ public class Series {
     private List<Season> seasons;
 
 
-    // Getters and Setters
+    public String getId() {
+        return id;
+    }
+
+
+    public String getTitle() {
+        return title;
+    }
+
+
+    public String getDescription() {
+        return description;
+    }
+
+
+    public int getTotalSeasons() {
+        return totalSeasons;
+    }
+
+
+    public boolean isOngoing() {
+        return ongoing;
+    }
+
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+
+    public String getMetadata() {
+        return metadata;
+    }
+
+
+    public List<Genre> getGenre() {
+        return genre;
+    }
+
+
+    public List<Season> getSeasons() {
+        return seasons;
+    }
+
+
+
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
+    public void setTotalSeasons(int totalSeasons) {
+        this.totalSeasons = totalSeasons;
+    }
+
+
+    public void setOngoing(boolean ongoing) {
+        this.ongoing = ongoing;
+    }
+
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
+    }
+
+
+    public void setGenre(List<Genre> genre) {
+        this.genre = genre;
+    }
+
+
+    public void setSeasons(List<Season> seasons) {
+        this.seasons = seasons;
+    }
+
+
+
+
+
 }

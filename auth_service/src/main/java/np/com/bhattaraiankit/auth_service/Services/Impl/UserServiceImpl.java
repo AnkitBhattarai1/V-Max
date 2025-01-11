@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,14 +62,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public JWTResponse generateToken(LoginRequest user) {
-    System.out.println(user);
+
+        //System.out.println(user);
         Authentication a = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.email_or_username(),user.password()));
                 System.out.println(user.email_or_username());
             
                 if(a.isAuthenticated()) {
-                    System.out.println("generate Token is called");
-                    JWTResponse res = new JWTResponse(jwtUtil.generateToken(user.email_or_username()), user.email_or_username(), List.of("Ankit"));     
-                return res;
+                    
+                    SecurityContextHolder.getContext().setAuthentication(a); 
+                    JWTResponse res = new JWTResponse(jwtUtil.generateToken(user.email_or_username()),
+                            user.email_or_username(),
+                            List.of("Ankit"));     
+                
+                    return res;
             }
             throw new RuntimeException("Invalid credentials");
     }

@@ -17,7 +17,7 @@ import np.com.bhattaraiankit.userService.DTO.UserResponse;
 import np.com.bhattaraiankit.userService.Services.UserService;
 
 @RestController
-@RequestMapping(path="/user")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -39,7 +39,7 @@ public class UserController {
             @RequestParam("verificationCode") String verification_code)
             throws MessagingException{
                     String response = userService.verifyUserEmail(email, verification_code);
-                    return  new ResponseEntity<String>(response, HttpStatus.CREATED);
+                    return  new ResponseEntity<String>(response, HttpStatus.OK);
             }
 
     @PostMapping("/addUser")
@@ -52,4 +52,12 @@ public class UserController {
     public ResponseEntity<RegistrationUserResponse> getUser(@RequestParam("email") String email){ 
         return new ResponseEntity<RegistrationUserResponse>(userService.getRegisteredUser(email),HttpStatus.OK);
     }
+
+    /*@GetMapping("/self")
+    public ResponseEntity<UserResponse> getSelf(){
+        reuturn null;
+    }
+    for this in api_gateway first the X-user-id is to be set in header by extracting the credentials from the jwt token and based on that the self is returned . 
+    For now it is handled throug getUser().......
+    */
 }
