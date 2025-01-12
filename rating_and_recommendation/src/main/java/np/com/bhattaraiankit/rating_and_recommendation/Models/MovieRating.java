@@ -3,11 +3,13 @@ package np.com.bhattaraiankit.rating_and_recommendation.Models;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 import org.hibernate.annotations.UuidGenerator;
 
-public class Rating {
+@Entity
+public class MovieRating {
     @Id
     @UuidGenerator
     private String id;
@@ -27,15 +29,15 @@ public class Rating {
     @Column(nullable = false)
     private LocalDateTime createdAt; // Timestamp for wh
 
-    public Rating(){
+    public MovieRating(){
         this.createdAt=LocalDateTime.now();
     }
 
     public String getId(){return this.id;}
     public String getVideoId(){return this.videoId;}
     public String getUserId(){return this.userId;}
-    public String getRevie(){return this.review;}
-
+    public String getReview(){return this.review;}
+    public double getRating(){return this.rating;}
 
     public void setVideoId(String videoId) {
         this.videoId = videoId;
