@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -38,75 +40,6 @@ public class VideoServiceImpl implements VideoService {
         this.constants=constants;// contains methods to have all the dynamic constants...
     }
 
-    // To get the extension of the video file. 
-    private String getFileExtension(String filename){
-        return Optional.of(filename).filter(name->name.contains("."))
-            .map(name->"."+name.substring(filename.lastIndexOf(".")+1))
-            .orElse(".mp4");
-    }
-    //Upload video///***
-
-    private String uploadVideo(MultipartFile video,String id){
-            // logic to  upload the video to the storage...
-        Path file_location = Paths.get(constants.getVideoLocation()+id+"/").toAbsolutePath().normalize();
-
-        try{       
-            if(!Files.exists(file_location))
-            Files.createDirectories(file_location);// create file location if it is not already exists....
-
-            //copies file to the specific location...
-        Files.copy(video.getInputStream(),
-                file_location.resolve(id+getFileExtension(video.getOriginalFilename())));
-
-
-
-    return  UriComponentsBuilder.newInstance()
-            .scheme("http")
-            .host(API_GATEWAY_HOST)
-            .port(API_GATEWAY_PORT)
-            .path("/"+id+getFileExtension(video.getOriginalFilename()))
-            .toUriString();
-        }
-   
-        catch(Exception e){
-        
-            throw new RuntimeException(e.getMessage());
-    }
-}
-
-
-
-    private String uploadThumbnail(MultipartFile thumbnail, String id){
-
-        //logic to add the thumbnail...
-        
-        Path file_location = Paths.get(constants.getThumbnailLocation()+id+"/").toAbsolutePath().normalize();
-
-        try{       
-            if(!Files.exists(file_location))
-            Files.createDirectories(file_location);// create file location if it is not already exists....
-
-            //copies file to the specific location...
-        Files.copy(thumbnail.getInputStream(),
-                file_location.resolve(id+getFileExtension(thumbnail.getOriginalFilename())));
-
-
-
-    return  UriComponentsBuilder.newInstance()
-            .scheme("http")
-            .host(API_GATEWAY_HOST)
-            .port(API_GATEWAY_PORT)
-            .path("/"+id+getFileExtension(thumbnail.getOriginalFilename()))
-            .toUriString();
-        }
-   
-        catch(Exception e){
-        
-            throw new RuntimeException(e.getMessage());
-    }
-        
-    }
-
     @Override
     public VideoResponse createVideo(CreateVideoRequest request,
             MultipartFile video,
@@ -121,11 +54,14 @@ public class VideoServiceImpl implements VideoService {
         v.setorginalVideoUrl(videoUrl);
         v.setThumbnailUrl(thumbnailUrl); 
         
+
         Video savedVideo = videoRepo.save(v);
+// To transcode the video and do something/// 
 
         // Convert the saved video entity to a response DTO
         return entityToResponse(savedVideo);
     }
+  
 
     @Override
     public void deleteVideo(String id) {
@@ -138,6 +74,11 @@ public class VideoServiceImpl implements VideoService {
         // Delete the video
         videoRepo.delete(video.get());
     }
+
+
+
+
+
 
     @Override
     public List<VideoResponse> getAllVideos() {
@@ -160,30 +101,94 @@ public class VideoServiceImpl implements VideoService {
         return entityToResponse(video);
     }
 
-    @Override
-    public VideoResponse updateVideo(String id, CreateVideoRequest requestDTO) {
-        // Fetch the existing video entity
-        Video existingVideo = videoRepo.findById(id)
-                .orElseThrow(() -> new VideoNotFoundException("Video with ID " + id + " not found"));
-
-        // Update the existing video entity with the new values from the request DTO
-        existingVideo.setTitle(requestDTO.title());
-        existingVideo.setDescription(requestDTO.description());
-        existingVideo.setTrailerUrl(requestDTO.trailerUrl());
-        existingVideo.setReleaseDate(requestDTO.releaseDate());
-        existingVideo.setDuration(requestDTO.duration());
-        existingVideo.setVideoType(requestDTO.videoType());
-        existingVideo.setAgeRating(requestDTO.ageRating());
-        existingVideo.setLanguage(requestDTO.language());
-        existingVideo.setMetaData(requestDTO.metadata());
-
-        // Save the updated video entity to the database
-        Video updatedVideo = videoRepo.save(existingVideo);
-
-        // Convert the updated video entity to a response DTO
-        return entityToResponse(updatedVideo);
+    // To get the extension of the video file. 
+    private String getFileExtension(String filename){
+        return Optional.of(filename).filter(name->name.contains("."))
+            .map(name->"."+name.substring(filename.lastIndexOf(".")+1))
+            .orElse(".mp4");
     }
 
+    //Upload video///***
+    private String uploadVideo(MultipartFile video,String id){
+            // logic to  upload the video to the storage...
+        Path file_location = Paths.get(constants.getVideoLocation()+id+"/").toAbsolutePath().normalize();
+
+        try{       
+            if(!Files.exists(file_location))
+            Files.createDirectories(file_location);// create file location if it is not already exists....
+
+            //copies file to the specific location...
+        Files.copy(video.getInputStream(),
+                file_location.resolve(id+getFileExtension(video.getOriginalFilename())));
+
+
+
+    return  UriComponentsBuilder.newInstance()
+            .scheme("http")
+            .host(API_GATEWAY_HOST)
+            .port(API_GATEWAY_PORT)
+            .path("/video/stream/"+id)
+            .toUriString();
+        }
+
+        catch(Exception e){
+        
+            throw new RuntimeException(e.getMessage());
+    }
+}
+
+    private String uploadThumbnail(MultipartFile thumbnail, String id){
+
+        //logic to add the thumbnail...
+        
+        Path file_location = Paths.get(constants.getThumbnailLocation()+id+"/").toAbsolutePath().normalize();
+
+        try{       
+            if(!Files.exists(file_location))
+            Files.createDirectories(file_location);// create file location if it is not already exists....
+
+            //copies file to the specific location...
+        Files.copy(thumbnail.getInputStream(),
+                file_location.resolve(id+getFileExtension(thumbnail.getOriginalFilename())));
+
+
+
+    return  UriComponentsBuilder.newInstance()
+            .scheme("http")
+            .host(API_GATEWAY_HOST)
+            .port(API_GATEWAY_PORT)
+            .path("/video/thumbnail/"+id)
+            .toUriString();
+        }
+   
+        catch(Exception e){
+        
+            throw new RuntimeException(e.getMessage());
+    }
+        
+    }
+
+
+
+    @Override
+    public Resource stream(String videoId) {
+
+        String filePath = (constants.getVideoLocation())+videoId+"/"+videoId+".mp4";
+        Resource resource = new FileSystemResource(filePath);
+        //String contentType = "application/octect-stream";
+        // TODO Auto-generated method stub
+        return resource;
+    }
+
+
+
+    
+    @Override
+    public Resource getThumbnail(String videoId) {
+
+        String filePath = (constants.getThumbnailLocation())+videoId+"/"+videoId+".jpg";
+        return new FileSystemResource(filePath);
+    }
 
     // Private helper method to convert CreateVideoRequest to Video entity
     private Video requestToEntity(CreateVideoRequest request) {

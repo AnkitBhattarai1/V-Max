@@ -32,9 +32,6 @@ spring:
           uri: lb://video-service
           predicates:
             - Path=/video/**
-            - Path=/episodes/**
-            - Path=/series/**
-            - Path=/seasons/**
 
         - id: rating_and_recommendation-service-route
           uri: lb://rating_and_recommendation-service

@@ -1,7 +1,9 @@
 import axios from "axios"
 import { DELETE_PRODUCT_SUCCESS, GET_PRODUCT_SUCCESS, PATCH_PRODUCT_SUCCESS, POST_PRODUCT_SUCCESS, PRODUCT_FAILURE, PRODUCT_REQUEST } from "./ActionTypes"
+import { createVideo } from "../../Services/MovieServices"
 
 export const getMovies = (obj)=>(dispatch)=>{
+
     dispatch({type:PRODUCT_REQUEST})
     axios.get(`https://movies-data-fdb6.onrender.com/movies/movie`,obj)
     .then((res)=>{
@@ -31,7 +33,7 @@ export const editProduct =({_id, data})=> (dispatch)=>{
 
 //addMovie
 export const addMovie =(movieData)=> (dispatch)=>{
-    console.log(movieData )
+    /*console.log(movieData )
     dispatch({type:PRODUCT_REQUEST})
     axios.post(`https://movies-data-fdb6.onrender.com/movies/movie`, movieData)
     .then((res)=>{
@@ -42,7 +44,9 @@ export const addMovie =(movieData)=> (dispatch)=>{
     .catch((err)=>{
         dispatch({type:PRODUCT_FAILURE})
     })
+*/
 
+       const data = createVideo(movieData); 
 }
 
 
