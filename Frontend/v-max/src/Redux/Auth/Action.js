@@ -1,6 +1,5 @@
 import axios from "axios"
 import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT_SUCCESS, POST_SIGN_SUCCESS, } from "./ActionTypes"
-import { DELETE_PRODUCT_SUCCESS } from "../MovieReducer/ActionTypes"
 
 
 //Login post request 

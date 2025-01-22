@@ -16,8 +16,7 @@ import axios from 'axios';
  */
 
 
-const BASE_URL='http://192.168.1.65:9090'
-
+import { BASE_URL } from '../Constants/Urls';
 
 export const startRegistration = async (email) => {
   

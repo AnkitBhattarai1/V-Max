@@ -1,15 +1,13 @@
+
 import { Box, Button, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import './MoviesCard.css'
+import './VideoCard.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteMovieCard } from '../Redux/Auth/Action'
-import { getMovies } from '../Redux/MovieReducer/Action'
-import { useEffect } from 'react'
 import { MYSPACE_UPDATE } from '../Redux/Auth/ActionTypes'
 
 
-export const CartMoviesCard = ({_id,Average_Rating,Description,Poster_Image,Release_Date,Runtime,Title,Trailer_URL}) => {
+export const CartVideoCard= ({id,averageRating,description,thumbnailUrl,Release_Date,duration,title,trailerUrl}) => {
   console.log("Description", Description)
   const Account_info = useSelector((store) => store.authReducer.Account_info)
   const movies = useSelector((store) => store.productReducer.movies);
@@ -26,7 +24,7 @@ export const CartMoviesCard = ({_id,Average_Rating,Description,Poster_Image,Rele
    const handleRemove= async ()=>{
    
   
-    console.log("Movie ID:", _id);
+    console.log("Movie ID:", id);
 
 
     try {
@@ -41,7 +39,7 @@ export const CartMoviesCard = ({_id,Average_Rating,Description,Poster_Image,Rele
 
         if (response.ok) {
             const result = await response.json();
-            let filteredMovies=Account_info.filter((movie)=> movie !==_id)
+            let filteredMovies=Account_info.filter((movie)=> movie !==id)
             dispatch({type:MYSPACE_UPDATE, payload:filteredMovies})
             console.log('Successfully removed from My Space:', result);
         } else {
@@ -60,14 +58,14 @@ export const CartMoviesCard = ({_id,Average_Rating,Description,Poster_Image,Rele
    }
 
     return (
-        <Box className='movie_Card' key={_id}>
+        <Box className='movie_Card' key={id}>
             <img width={"100%"} height={"100px"}  className="zoom-image" src={Poster_Image} alt="" />
           <Box className='details'>
-              <h4 >{Title}</h4>
-              <p >RunTime:{Runtime}</p>
-              <p >{Description}</p>
+              <h4 >{title}</h4>
+              <p >RunTime:{duration}</p>
+              <p >{description}</p>
               <div id='moviebtn'>
-              <Link to={`/movie/${_id}`}>
+              <Link to={`/movie/${id}`}>
                <Button  colorScheme='gray'   >
         Watch 
       </Button></Link>

@@ -1,3 +1,4 @@
+
 server:
   port: 9090
 
@@ -15,25 +16,35 @@ spring:
             allowedMethods: '*'
             allowedHeaders: '*'
             allowCredentials: false
-      
-      routes:
 
+      routes:
+        # Authentication service route
         - id: auth-service-route
           uri: lb://auth-service
           predicates:
             - Path=/auth/**
 
+        # User service route
         - id: user-service-route
           uri: lb://user-service
           predicates:
             - Path=/user/**
 
+        # Video service route
         - id: video-service-route
           uri: lb://video-service
           predicates:
             - Path=/video/**
 
-        - id: rating_and_recommendation-service-route
-          uri: lb://rating_and_recommendation-service
+
+        - id: video-service-route
+          uri: lb://video-service
           predicates:
-            - Path=/rating/**
+            - Path=/movies/**
+
+        # Rating and recommendation service route
+        - id: rating_and_recommendation-service-route
+          uri: lb://rating-and-recommendation
+          predicates:
+            - Path=/recommendation/**
+

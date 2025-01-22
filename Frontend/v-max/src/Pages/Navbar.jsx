@@ -33,8 +33,9 @@ import { FaRegCircleUser } from "react-icons/fa6"
   import {Link, useNavigate} from "react-router-dom"
   import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMovies } from '../Redux/MovieReducer/Action'
-import { MoviesCard } from '../Components/MoviesCard'
+import { fetchallmovies} from '../Redux/MovieReducer/Action'
+import { getVideo } from '../Redux/VideoReducer/Action';
+import { VideoCard} from '../Components/VideoCard'
 import "./Navbar.css"
 import Logo from "../Imges/PLY.png"
 import { FaUserCircle } from "react-icons/fa";
@@ -47,16 +48,26 @@ export default function Navbar() {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [data,setData]=useState([])
   const dispatch=useDispatch()
-  const Movies=useSelector((store)=> store.productReducer.movies)
- 
+  const movies=useSelector((store)=> store.movieReducer.movies);
+  const videos = useSelector((store)=>store.videoReducer.videos); 
   const videoId = new URL("https://www.youtube.com/embed/tABlzTH8G9o?si=frgn1yoLc3W6RwJS").searchParams.get("v");
 
 console.log(auth, "I AM AUTH")
 
+ // Fetching all movies on component mount
+  useEffect(() => {
+    dispatch(fetchallmovies());
+  }, [dispatch]);
 
-  useEffect(()=>{
-    dispatch(getMovies())
-  },[])
+  // Fetching the actual video data based on the movie IDs
+  useEffect(() => {
+    if (movies && movies.length > 0) {
+      movies.forEach((movie) => {
+        dispatch(getVideo(movie.videoId)); // Dispatch getVideo action with videoId from movie
+      });
+    }
+  }, [movies, dispatch]);
+
 
   // console.log(Movies)
 

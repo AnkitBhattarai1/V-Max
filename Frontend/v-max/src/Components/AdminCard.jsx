@@ -1,8 +1,8 @@
 import { Box, Button } from '@chakra-ui/react'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import './MoviesCard.css'
-import { deleteMovie } from '../Redux/MovieReducer/Action'
+import './VideoCard.css'
+import { } from '../Redux/MovieReducer/Action'
 import { useDispatch } from 'react-redux'
 
 export const AdminCard = ({_id,Average_Rating,Description,Poster_Image,Release_Date,Runtime,Title,Trailer_URL}) => {
@@ -11,7 +11,7 @@ export const AdminCard = ({_id,Average_Rating,Description,Poster_Image,Release_D
     //from action.js
     const handleDelete=()=>{
       console.log("IAM DELETE Button")
-      dispatch(deleteMovie(_id))
+      //dispatch(deleteMovie(_id))
 
     }
 

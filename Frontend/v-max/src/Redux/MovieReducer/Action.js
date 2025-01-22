@@ -1,67 +1,67 @@
-import axios from "axios"
-import { DELETE_PRODUCT_SUCCESS, GET_PRODUCT_SUCCESS, PATCH_PRODUCT_SUCCESS, POST_PRODUCT_SUCCESS, PRODUCT_FAILURE, PRODUCT_REQUEST } from "./ActionTypes"
-import { createVideo } from "../../Services/MovieServices"
 
-export const getMovies = (obj)=>(dispatch)=>{
+import {
+    CREATE_MOVIE_SUCCESS,
+    GET_MOVIE_SUCCESS,
+    GET_MOVIES_BY_IDS_SUCCESS,
+    GET_ALL_MOVIES_SUCCESS,
+    MOVIE_REQUEST,
+    MOVIE_FAILURE
+} from "./ActionTypes";
 
-    dispatch({type:PRODUCT_REQUEST})
-    axios.get(`https://movies-data-fdb6.onrender.com/movies/movie`,obj)
-    .then((res)=>{
-        dispatch({type:GET_PRODUCT_SUCCESS, payload :res.data})
-    })
-    .catch((err)=>{
-        dispatch({type:PRODUCT_FAILURE})
-    })
-}
+import { createmovie, getmoviebyid, getmoviesbyids, getallmovies } from "../../Services/MovieService";
 
+// action to create a new movie
+export const addmovie = (moviedata) => (dispatch) => {
+    dispatch({ type: MOVIE_REQUEST});
 
-// //Edit the product on page patch request
-export const editProduct =({_id, data})=> (dispatch)=>{
-    console.log(data )
-    dispatch({type:PRODUCT_REQUEST})
-    axios.patch(`https://movies-data-fdb6.onrender.com/movies/movie/${_id}`, data)
-    .then((res)=>{
-        console.log(res)
-       dispatch({type:PATCH_PRODUCT_SUCCESS})
+    createmovie(moviedata)
+        .then((res) => {
+            dispatch({ type: CREATE_MOVIE_SUCCESS, payload: res });
+        })
+        .catch((err) => {
+            console.error("error creating movie:", err);
+            dispatch({ type: MOVIE_FAILURE });
+        });
+};
 
-    })
-    .catch((err)=>{
-        dispatch({type:PRODUCT_FAILURE})
-    })
+// action to fetch a movie by id
+export const fetchmoviebyid = (id) => (dispatch) => {
+    dispatch({ type: MOVIE_REQUEST });
 
-}
+    getmoviebyid(id)
+        .then((res) => {
+            dispatch({ type: GET_MOVIE_SUCCESS, payload: res });
+        })
+        .catch((err) => {
+            console.error("error fetching movie by id:", err);
+            dispatch({ type: MOVIE_FAILURE});
+        });
+};
 
-//addMovie
-export const addMovie =(movieData)=> (dispatch)=>{
-    /*console.log(movieData )
-    dispatch({type:PRODUCT_REQUEST})
-    axios.post(`https://movies-data-fdb6.onrender.com/movies/movie`, movieData)
-    .then((res)=>{
-        console.log(res)
-       dispatch({type:POST_PRODUCT_SUCCESS})
+// action to fetch multiple movies by ids
+export const fetchmoviesbyids = (ids) => (dispatch) => {
+    dispatch({ type: MOVIE_REQUEST });
 
-    })
-    .catch((err)=>{
-        dispatch({type:PRODUCT_FAILURE})
-    })
-*/
+    getmoviesbyids(ids)
+        .then((res) => {
+            dispatch({ type: GET_MOVIES_BY_IDS_SUCCESS, payload: res });
+        })
+        .catch((err) => {
+            console.error("error fetching movies by ids:", err);
+            dispatch({ type: MOVIE_FAILURE});
+        });
+};
 
-       const data = createVideo(movieData); 
-}
+// action to fetch all movies
+export const fetchallmovies = () => (dispatch) => {
+    dispatch({ type: MOVIE_REQUEST });
 
-
-export const deleteMovie =(_id)=> (dispatch)=>{
-    dispatch({type:PRODUCT_REQUEST})
-    axios.delete(`https://movies-data-fdb6.onrender.com/movies/movie/${_id}`)
-    .then((res)=>{
-        console.log(res)
-       dispatch({type:DELETE_PRODUCT_SUCCESS})
-
-    })
-    .catch((err)=>{
-        dispatch({type:PRODUCT_FAILURE})
-    })
-
-}
-
-
+    getallmovies()
+        .then((res) => {
+            dispatch({ type: GET_ALL_MOVIES_SUCCESS, payload: res });
+        })
+        .catch((err) => {
+            console.error("error fetching all movies:", err);
+            dispatch({ type: MOVIE_FAILURE });
+        });
+};

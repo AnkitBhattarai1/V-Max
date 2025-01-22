@@ -53,6 +53,8 @@ public class MovieServiceImpl implements MovieService {
                 .collect(Collectors.toList());
     }
 
+
+
     @Override
     public MovieResponse createMovie(CreateMovieRequest movieRequest) {
         return MovieResponse.fromEntity(movieRepo.save(requestToMovieEntity(movieRequest))); 
@@ -85,6 +87,17 @@ public class MovieServiceImpl implements MovieService {
                 .collect(Collectors.toSet())); 
 
     return m;
+    }
+
+    @Override
+    public List<MovieResponse> getAllMovies() {
+        // Assuming MovieRepository has a method to fetch all movies
+        List<Movie> allMovies = movieRepo.findAll();
+
+        // Convert Movie entities to MovieResponse DTOs
+        return allMovies.stream()
+            .map(MovieResponse::fromEntity)
+                        .collect(Collectors.toList());
     }
 
     
