@@ -6,6 +6,7 @@ import { Login } from '../Pages/Login'
 import { Admin } from '../Pages/Admin'
 import { AdminPage } from '../Pages/AdminPage'
 import {VideoUpload} from '../Pages/VideoUpload'
+import { VideoPlayerPage } from '../Pages/VideoPlayerPage'
 
 export const AllRoutes = () => {
   return (
@@ -16,7 +17,7 @@ export const AllRoutes = () => {
         <Route path="/Admin" element={<Admin/>} ></Route>
         <Route path="/AdminPage" element={<AdminPage/>} ></Route>
         <Route path="/videoUpload" element={<VideoUpload/>}></Route>
-
+        <Route path="/video" element ={<VideoPlayerPage/>}></Route>
 
       </Routes>
   )
