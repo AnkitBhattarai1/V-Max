@@ -18,6 +18,7 @@ export const getVideos = () => (dispatch) => {
 
 // Action to fetch a video by ID
 export const getVideo = (id) => (dispatch) => {
+    
     dispatch({ type: VIDEO_REQUEST });
 
     getVideoById(id)

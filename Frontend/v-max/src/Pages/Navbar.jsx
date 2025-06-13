@@ -194,12 +194,12 @@ const SidebarContent = ({ ...props }) => {
               <NavItem  icon={GoHomeFill}>Home</NavItem>
             </Link>
             <Link to="/shows">
-              <NavItem icon={LiaTvSolid}>TV</NavItem>
+              <NavItem icon={LiaTvSolid}>Shows</NavItem>
             </Link>
-            <Link to="/movies">
+            <Link to="/movie">
               <NavItem icon={PiFilmSlateFill}>Movies</NavItem>
             </Link>
-            <Link to="/categories">
+            <Link to="/Category">
               <NavItem icon={BiSolidCategory}>Categories</NavItem>
             </Link>
           </Flex>

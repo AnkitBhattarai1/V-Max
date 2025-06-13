@@ -1,36 +1,21 @@
+import { Box, Heading, Text, VStack } from "@chakra-ui/react";
 
-
-import React from "react";
-import { Box, Button } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-
-export const VideoCard = ({ id, title, description, thumbnailUrl, duration, originalVideoUrl }) => {
-  const navigate = useNavigate();
-
-  const handleWatchNow = () => {
-    navigate("/video", { state: { videoUrl: originalVideoUrl, title } });
-  };
-
+export const VideoCard = ({ title, id, children }) => {
   return (
-    <Box className="movie_Card" key={id}>
-      <img
-        width="100%"
-        height="150px"
-        className="zoom-image"
-        src={thumbnailUrl}
-        alt={title}
-      />
-      <Box className="details">
-        <h4>{title}</h4>
-        <p>Runtime: {duration} mins</p>
-        <p>{description}</p>
-        <div>
-          <Button colorScheme="blue" onClick={handleWatchNow}>
-            Watch Now
-          </Button>
-        </div>
-      </Box>
+    <Box
+      p={5}
+      bg="white"
+      borderRadius="2xl"
+      shadow="lg"
+      border="1px solid #E2E8F0"
+      width="150%"
+      minH="200px"
+    >
+      <VStack align="start" spacing={3}>
+        <Heading fontSize="xl">{title}</Heading>
+        <Text fontSize="sm" color="gray.500">ID: {id}</Text>
+        {children}
+      </VStack>
     </Box>
   );
 };
-
