@@ -1,0 +1,45 @@
+/* Category.css */
+
+.category-container {
+  margin-left: 200px;
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+}
+
+.category-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #2d3748;
+}
+
+.video-row {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 20px;
+  padding-bottom: 10px;
+}
+
+.video-row::-webkit-scrollbar {
+  height: 8px;
+}
+
+.video-row::-webkit-scrollbar-thumb {
+  background: #a0aec0;
+  border-radius: 10px;
+}
+
+.info-box {
+  background-color: #edf2f7;
+  padding: 10px;
+  border-radius: 12px;
+  margin-top: 6px;
+}
+
+.no-videos {
+  color: #718096;
+  font-style: italic;
+  padding: 20px;
+}

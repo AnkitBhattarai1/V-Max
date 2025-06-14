@@ -1,16 +1,11 @@
-.Movies {
-    border:"1px solid red";
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 20px;
-    padding: 10px;
-  
-    @media (max-width: 768px) {
-      grid-template-columns: repeat(3, 1fr);
-     
-    }
-  
-    @media (max-width: 550px) {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
+.movie-container {
+  min-height: 100vh;
+  width: calc(100% - 250px);
+}
+
+.movie-info-box {
+  background-color: #f7fafc;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
