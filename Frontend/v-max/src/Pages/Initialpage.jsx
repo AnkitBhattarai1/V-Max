@@ -75,7 +75,7 @@ export const Initialpage = () => {
           <h1>Welcome to V-MAX</h1>
           <p>Your Ultimate Video Partner</p>
           <div className="button-container">
-            <button className="action-btn" onClick={() => navigate('/signup')}>
+            <button className="action-btn" onClick={() => navigate('/SignUP')}>
               Sign Up 
             </button>
             <button className="action-btn" onClick={() => navigate('/Login')}>
