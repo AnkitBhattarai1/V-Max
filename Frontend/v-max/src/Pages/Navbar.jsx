@@ -52,7 +52,6 @@ export default function Navbar() {
   const videos = useSelector((store)=>store.videoReducer.videos); 
   const videoId = new URL("https://www.youtube.com/embed/tABlzTH8G9o?si=frgn1yoLc3W6RwJS").searchParams.get("v");
 
-console.log(auth, "I AM AUTH")
 
  // Fetching all movies on component mount
   useEffect(() => {
@@ -187,10 +186,7 @@ const SidebarContent = ({ ...props }) => {
             <Link to="/Private">
               <NavItem icon={FaRegCircleUser}>My Space</NavItem>
             </Link>
-            <Link to="/explore">
-              <NavItem icon={CiSearch}>Search</NavItem>
-            </Link>
-            <Link to="/"  >
+            <Link to="/Home"  >
               <NavItem  icon={GoHomeFill}>Home</NavItem>
             </Link>
             <Link to="/shows">
@@ -226,15 +222,8 @@ const SidebarContent = ({ ...props }) => {
             </MenuButton>
             <MenuList fontSize={15} zIndex={5555} background='transparent'>
               
-              {auth  ? <MenuItem background='transparent' color="white" onClick={handleLogout} >Logout</MenuItem>  :
-                <Box>
-                  <MenuItem as={Link} to="/Login" background='transparent' color="white" >
-                    Login
-                  </MenuItem>
-                  <MenuItem as={Link} to="/SignUp" background='transparent' color="white" >
-                    SignUp
-                  </MenuItem>
-                </Box>
+              {<MenuItem background='transparent' color="white" onClick={handleLogout} >Logout</MenuItem>  
+              
               }
             </MenuList>
           </Menu>

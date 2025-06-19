@@ -1,45 +1,82 @@
+// /Redux/VideoReducer/Reducer.js
 
-import { CREATE_VIDEO_SUCCESS, DELETE_VIDEO_SUCCESS, GET_VIDEO_SUCCESS, GET_VIDEOS_BY_IDS_SUCCESS, STREAM_VIDEO_SUCCESS, GET_THUMBNAIL_SUCCESS, VIDEO_FAILURE, VIDEO_REQUEST } from "./ActionTypes";
+import {
+  CREATE_VIDEO_SUCCESS,
+  DELETE_VIDEO_SUCCESS,
+  GET_VIDEO_SUCCESS,
+  GET_VIDEOS_BY_IDS_SUCCESS,
+  STREAM_VIDEO_SUCCESS,
+  GET_THUMBNAIL_SUCCESS,
+  VIDEO_FAILURE,
+  VIDEO_REQUEST,
+} from "./ActionTypes";
 
 const initialState = {
-    videos: [],
-    isLoading: false,
-    isError: false,
-    video: null, // To store individual video data
-    thumbnail: null, // To store video thumbnail
+  videos: {}, // changed from array to map
+  isLoading: false,
+  isError: false,
+  video: null,
+  thumbnail: null,
 };
 
 export const videoReducer = (state = initialState, { type, payload }) => {
-    switch (type) {
-        case VIDEO_REQUEST:
-            return { ...state, isLoading: true, isError: false };
+  switch (type) {
+    case VIDEO_REQUEST:
+      return { ...state, isLoading: true, isError: false };
 
-        case VIDEO_FAILURE:
-            return { ...state, isError: true, isLoading: false };
+    case VIDEO_FAILURE:
+      return { ...state, isError: true, isLoading: false };
 
-        case GET_VIDEO_SUCCESS:
-            return { ...state, isLoading: false, videos:[...state.videos, payload] };
+    case GET_VIDEO_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        videos: {
+          ...state.videos,
+          [payload.id]: payload,
+        },
+      };
 
-        case CREATE_VIDEO_SUCCESS:
-            return { ...state, isLoading: false, videos: [...state.videos, payload] };
+    case CREATE_VIDEO_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        videos: {
+          ...state.videos,
+          [payload.id]: payload,
+        },
+      };
 
-        case DELETE_VIDEO_SUCCESS:
-            return {
-                ...state,
-                isLoading: false,
-                videos: state.videos.filter((video) => video.id !== payload),
-            };
+    case DELETE_VIDEO_SUCCESS:
+      const updatedVideos = { ...state.videos };
+      delete updatedVideos[payload];
+      return {
+        ...state,
+        isLoading: false,
+        videos: updatedVideos,
+      };
 
-        case STREAM_VIDEO_SUCCESS:
-            return { ...state, isLoading: false, videoStream: payload };
+    case STREAM_VIDEO_SUCCESS:
+      return { ...state, isLoading: false, videoStream: payload };
 
-        case GET_THUMBNAIL_SUCCESS:
-            return { ...state, isLoading: false, thumbnail: payload };
+    case GET_THUMBNAIL_SUCCESS:
+      return { ...state, isLoading: false, thumbnail: payload };
 
-        case GET_VIDEOS_BY_IDS_SUCCESS:
-            return { ...state, isLoading: false, videos: payload };
+    case GET_VIDEOS_BY_IDS_SUCCESS:
+      const videoMap = {};
+      payload.forEach((video) => {
+        videoMap[video.id] = video;
+      });
+      return {
+        ...state,
+        isLoading: false,
+        videos: {
+          ...state.videos,
+          ...videoMap,
+        },
+      };
 
-        default:
-            return state;
-    }
+    default:
+      return state;
+  }
 };

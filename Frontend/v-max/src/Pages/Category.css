@@ -4,7 +4,7 @@
   margin-left: 200px;
   padding: 20px;
   min-height: 100vh;
-  background-color: #f8f8f8;
+  background-color: #07080a;
 }
 
 .category-title {
@@ -27,12 +27,12 @@
 }
 
 .video-row::-webkit-scrollbar-thumb {
-  background: #a0aec0;
+  background: #086aea;
   border-radius: 10px;
 }
 
 .info-box {
-  background-color: #edf2f7;
+  background-color: #1485f6;
   padding: 10px;
   border-radius: 12px;
   margin-top: 6px;

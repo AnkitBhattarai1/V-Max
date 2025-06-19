@@ -53,7 +53,7 @@ export const Admin = () => {
             ),
            
           })
-          navigate("/videoUpload")
+          navigate("/adminpage")
 
     }
     else{

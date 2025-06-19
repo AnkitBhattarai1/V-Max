@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Heading,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { Box, Heading, Text, SimpleGrid, CircularProgress, Center } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { fetchallmovies } from "../Redux/MovieReducer/Action";
 import { getVideo } from "../Redux/VideoReducer/Action";
-import { VideoCard } from "../Components/VideoCard";
+import { VideoCard } from "../Components/VideoCard"; // Adjusted to use video prop directly
+import { TopNavbar } from "./topnavbar";
 import "./Category.css";
 
 export const Category = () => {
-  const { categoryName } = useParams();
+  const { categoryName } = useParams(); // Extract categoryName from URL params
   const dispatch = useDispatch();
   const movies = useSelector((store) => store.movieReducer.movies);
   const videosMap = useSelector((store) => store.videoReducer.videos);
-  const bgColor = useColorModeValue("gray.100", "gray.700");
-
+  const isLoading = useSelector((store) => store.movieReducer.isLoading);
   const [categoryVideos, setCategoryVideos] = useState([]);
 
   useEffect(() => {
@@ -28,78 +23,62 @@ export const Category = () => {
   useEffect(() => {
     if (movies && movies.length > 0) {
       movies.forEach((movie) => {
-        dispatch(getVideo(movie.videoId));
+        if (movie.videoId) {
+          dispatch(getVideo(movie.videoId));
+        }
       });
     }
   }, [dispatch, movies]);
 
   useEffect(() => {
-    const filtered = movies
-      .filter((movie) =>
-        movie.genres?.map((g) => g.toLowerCase()).includes(categoryName.toLowerCase())
-      )
+    // Filtering movies by category
+    const filteredVideos = movies
+      .filter((movie) => {
+        const movieGenres = movie.genres || []; // Default to empty array if genres is undefined
+        if (categoryName && movieGenres.length > 0) {
+          return movieGenres.some((genre) =>
+            genre.toLowerCase().includes(categoryName.toLowerCase())
+          );
+        }
+        return false;
+      })
       .map((movie) => {
         const video = videosMap[movie.videoId] || {};
         return {
-          id: movie.videoId || "unknown",
+          id: movie.videoId,
           title: video.title || "Untitled",
-          duration: video.duration || "N/A",
-          views: video.views || 0,
-          uploadDate: video.uploadDate || "Unknown",
-          category: movie.genres?.join(", ") || "Uncategorized",
+          thumbnailUrl: video.thumbnailUrl || "https://via.placeholder.com/300x170?text=No+Thumbnail",
         };
       });
 
-    // ==== TEST FALLBACK DATA ====
-    const testFallback = [
-      {
-        id: "testcat1",
-        title: `Test Video in ${categoryName}`,
-        duration: "9 min",
-        views: 888,
-        uploadDate: "2025-06-01",
-        category: categoryName,
-      },
-      {
-        id: "testcat2",
-        title: `Another ${categoryName} Sample`,
-        duration: "7 min",
-        views: 555,
-        uploadDate: "2025-06-02",
-        category: categoryName,
-      },
-    ];
-    // =============================
-
-    setCategoryVideos(filtered.length > 0 ? filtered : testFallback);
+    setCategoryVideos(filteredVideos);
   }, [movies, videosMap, categoryName]);
 
+  if (isLoading) {
+    return (
+      <Center h="100vh">
+        <CircularProgress isIndeterminate color="green.400" />
+      </Center>
+    );
+  }
+
   return (
-    <Box className="category-container">
-      <Heading className="category-title" mb={4}>
-        Category: {categoryName}
-      </Heading>
-      {categoryVideos.length === 0 ? (
-        <Text className="no-videos">No videos found in this category.</Text>
-      ) : (
-        <Box className="video-row">
-          {categoryVideos.map((video) => (
-            <VideoCard key={video.id} title={video.title} id={video.id}>
-              <Box className="info-box" bg={bgColor}>
-                <Text>
-                  <strong>Duration:</strong> {video.duration}
-                </Text>
-                <Text>
-                  <strong>Views:</strong> {video.views}
-                </Text>
-                <Text>
-                  <strong>Uploaded:</strong> {video.uploadDate}
-                </Text>
-              </Box>
-            </VideoCard>
-          ))}
-        </Box>
-      )}
-    </Box>
+    <>
+      <TopNavbar />
+      <Box pt="70px" p={4} className="category-container">
+        <Heading mb={4} color="teal.300">
+          Category: {categoryName}
+        </Heading>
+        {categoryVideos.length === 0 ? (
+          <Text>No videos found in this category.</Text>
+        ) : (
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+            {categoryVideos.map((video) => (
+              <VideoCard key={video.id} video={video} />
+            ))}
+          </SimpleGrid>
+        )}
+      </Box>
+    </>
   );
 };
