@@ -164,7 +164,7 @@ export const SignUp = () => {
     });
 
     setUser(initialState);
-    navigate('/');
+    navigate('/Login');
   }
   };
 

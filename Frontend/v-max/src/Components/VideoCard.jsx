@@ -1,21 +1,30 @@
-import { Box, Heading, Text, VStack } from "@chakra-ui/react";
+import React from "react";
+import { Box, Text, Image } from "@chakra-ui/react";
+import "./VideoCard.css";
 
-export const VideoCard = ({ title, id, children }) => {
+export const VideoCard = ({ video }) => {
   return (
     <Box
-      p={5}
-      bg="white"
-      borderRadius="2xl"
-      shadow="lg"
-      border="1px solid #E2E8F0"
-      width="150%"
-      minH="200px"
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      bg="#111"
+      boxShadow="lg"
+      className="video-card"
+      _hover={{ transform: "scale(1.02)", cursor: "pointer" }}
     >
-      <VStack align="start" spacing={3}>
-        <Heading fontSize="xl">{title}</Heading>
-        <Text fontSize="sm" color="gray.500">ID: {id}</Text>
-        {children}
-      </VStack>
+      <Image
+        src={video.thumbnailUrl}
+        alt={video.title}
+        width="100%"
+        height="170px"
+        objectFit="cover"
+      />
+      <Box p={4}>
+        <Text fontSize="lg" fontWeight="bold" color="teal.300" mb={2}>
+          {video.title}
+        </Text>
+      </Box>
     </Box>
   );
 };

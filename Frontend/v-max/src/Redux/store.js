@@ -1,11 +1,24 @@
-import {applyMiddleware, combineReducers, legacy_createStore} from "redux"
-import { Reducer as authReducer } from "./Auth/Reducer"
-import { movieReducer as movieReducer } from "./MovieReducer/Reducer"
-import { videoReducer as videoReducer} from "./VideoReducer/Reducer"
+import { applyMiddleware, combineReducers, legacy_createStore } from "redux";
+import { Reducer as authReducer } from "./Auth/Reducer";
+import { movieReducer } from "./MovieReducer/Reducer";
+import { videoReducer } from "./VideoReducer/Reducer";
 
-import {thunk} from "redux-thunk"
+// NEW: Import your new reducers
+import { seriesReducer } from "./SeriesReducer/Reducer";
+import { seasonReducer } from "./SeasonReducer/Reducer";
+import { episodeReducer } from "./EpisodeReducer/Reducer";
 
-const rootReducer = combineReducers({authReducer, movieReducer,videoReducer})
+import { thunk } from "redux-thunk";
 
-export const store = legacy_createStore(rootReducer,applyMiddleware(thunk))
+const rootReducer = combineReducers({
+  authReducer,
+  movieReducer,
+  videoReducer,
 
+  // NEW: Add these
+  seriesReducer,
+  seasonReducer,
+  episodeReducer,
+});
+
+export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));
