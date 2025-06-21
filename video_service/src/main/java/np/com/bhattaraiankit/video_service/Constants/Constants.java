@@ -16,8 +16,6 @@ public class Constants {
 
     private static String rootFolder = System.getProperty("user.home");
 
-
-
     //constans//
     private static String RAW_VIDEO_LOCATION;
     private static String THUMBNAIL_LOCATION;

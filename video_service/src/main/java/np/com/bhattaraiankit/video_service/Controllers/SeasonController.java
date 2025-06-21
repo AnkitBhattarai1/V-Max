@@ -18,7 +18,7 @@ import np.com.bhattaraiankit.video_service.DTO.Responses.SeasonResponse;
 import np.com.bhattaraiankit.video_service.Services.SeasonService;
 
 @RestController
-@RequestMapping("/seasons")
+@RequestMapping("/season")
 public class SeasonController {
 
     private final SeasonService seasonService;

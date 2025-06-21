@@ -18,7 +18,8 @@ import np.com.bhattaraiankit.video_service.Services.MovieService;
 
 
 @RestController
-@RequestMapping("/movies")
+@RequestMapping("/movie")
+
 public class MovieController {
 
     private final MovieService movieService;

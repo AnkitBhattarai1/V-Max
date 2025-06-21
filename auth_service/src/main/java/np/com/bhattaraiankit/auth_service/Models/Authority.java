@@ -40,4 +40,5 @@ public class Authority {
     public Set<User> getUsers(){
         return users;
     }
+
 }

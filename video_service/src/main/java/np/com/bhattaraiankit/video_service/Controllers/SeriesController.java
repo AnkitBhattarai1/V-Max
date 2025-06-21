@@ -30,7 +30,7 @@ public class SeriesController {
         return ResponseEntity.ok(seriesService.getSeriesById(id));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<SeriesResponse>> getAllSeries() {
         return ResponseEntity.ok(seriesService.getAllSeries());
     }

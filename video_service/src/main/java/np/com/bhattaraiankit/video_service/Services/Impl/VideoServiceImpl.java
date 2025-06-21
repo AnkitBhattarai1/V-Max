@@ -20,24 +20,28 @@ import np.com.bhattaraiankit.video_service.Exceptions.VideoNotFoundException;
 import np.com.bhattaraiankit.video_service.Models.Video;
 import np.com.bhattaraiankit.video_service.Models.Video.VideoStatus;
 import np.com.bhattaraiankit.video_service.Repository.VideoRepo;
+import np.com.bhattaraiankit.video_service.Services.TranscodingService;
 import np.com.bhattaraiankit.video_service.Services.VideoService;
-
 @Service
 public class VideoServiceImpl implements VideoService {
 
     
 
-    private static final String API_GATEWAY_HOST = "localhost";
+    private static final String API_GATEWAY_HOST = "api.bhattaraiankit.com.np";
     private static final int API_GATEWAY_PORT = 9090;
 
     private final Constants constants;
     private final VideoRepo videoRepo;
 
+    private final TranscodingService transcodingService;
     VideoServiceImpl(VideoRepo videoRepo,
-            Constants constants)
+            Constants constants,
+            TranscodingService transcodingService)
     {
         this.videoRepo=videoRepo;
         this.constants=constants;// contains methods to have all the dynamic constants...
+    
+        this.transcodingService = transcodingService;
     }
 
     @Override
@@ -58,8 +62,12 @@ public class VideoServiceImpl implements VideoService {
         Video savedVideo = videoRepo.save(v);
 // To transcode the video and do something/// 
 
+// Asynchronous transcoding
+new Thread(() -> transcodingService.transcodeToHLSAndDASH(savedVideo.getId())).start();
+        
         // Convert the saved video entity to a response DTO
         return entityToResponse(savedVideo);
+
     }
   
 
@@ -124,9 +132,8 @@ public class VideoServiceImpl implements VideoService {
 
 
     return  UriComponentsBuilder.newInstance()
-            .scheme("http")
+            .scheme("https")
             .host(API_GATEWAY_HOST)
-            .port(API_GATEWAY_PORT)
             .path("/video/stream/"+id)
             .toUriString();
         }
@@ -154,9 +161,8 @@ public class VideoServiceImpl implements VideoService {
 
 
     return  UriComponentsBuilder.newInstance()
-            .scheme("http")
+            .scheme("https")
             .host(API_GATEWAY_HOST)
-            .port(API_GATEWAY_PORT)
             .path("/video/thumbnail/"+id)
             .toUriString();
         }

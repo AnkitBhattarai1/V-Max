@@ -10,41 +10,55 @@ spring:
     gateway:
       globalcors:
         corsConfigurations:
-          '[/**]':
-            allowedOrigins: 
-              - '*'
-            allowedMethods: '*'
-            allowedHeaders: '*'
+          '[/**]':   # this wildcard means all routes
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
             allowCredentials: false
 
       routes:
-        # Authentication service route
         - id: auth-service-route
           uri: lb://auth-service
           predicates:
             - Path=/auth/**
 
-        # User service route
         - id: user-service-route
           uri: lb://user-service
           predicates:
             - Path=/user/**
 
-        # Video service route
         - id: video-service-route
           uri: lb://video-service
           predicates:
             - Path=/video/**
 
-
-        - id: video-service-route
+        - id: movies-service-route
           uri: lb://video-service
           predicates:
-            - Path=/movies/**
+            - Path=/movie/**
+        
+        - id: series-service-route
+          uri: lb://video-service
+          predicates:
+            - Path=/series/**
 
-        # Rating and recommendation service route
+        - id: season-service-route
+          uri: lb://video-service
+          predicates:
+            - Path=/season/**
+        
+        - id: episode-service-route
+          uri: lb://video-service
+          predicates:
+            - Path=/episode/**
+        
         - id: rating_and_recommendation-service-route
           uri: lb://rating-and-recommendation
           predicates:
             - Path=/recommendation/**
-

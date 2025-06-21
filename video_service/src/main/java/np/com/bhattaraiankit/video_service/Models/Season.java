@@ -16,6 +16,7 @@ import org.hibernate.annotations.UuidGenerator;
 @Entity
 public class Season {
 
+    
     @Id
     @UuidGenerator
     private String id;

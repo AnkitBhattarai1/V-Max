@@ -11,8 +11,7 @@ import np.com.bhattaraiankit.video_service.DTO.Responses.VideoResponse;
 @Service
 public interface VideoService {
 
-  VideoResponse createVideo(CreateVideoRequest request,
-          MultipartFile video,
+  VideoResponse createVideo(CreateVideoRequest request, MultipartFile video,
           MultipartFile thumbnail);
 
     VideoResponse getVideoById(String id);

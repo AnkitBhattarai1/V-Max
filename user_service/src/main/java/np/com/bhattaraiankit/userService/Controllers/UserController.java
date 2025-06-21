@@ -30,7 +30,8 @@ public class UserController {
     @PostMapping("/startReg")
     public ResponseEntity<?> startRegistration(@RequestBody String email)
     throws MessagingException{
-            return ResponseEntity.ok().body(userService.registerUserEmail(email));
+
+    return ResponseEntity.ok().body(userService.registerUserEmail(email));
     } 
 
     // api endpoint to verify if the entered email is right or not...

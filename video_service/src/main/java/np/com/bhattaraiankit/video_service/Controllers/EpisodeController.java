@@ -17,7 +17,8 @@ import np.com.bhattaraiankit.video_service.DTO.Responses.EpisodeResponse;
 import np.com.bhattaraiankit.video_service.Services.EpisodeService;
 
 @RestController
-@RequestMapping("/episodes")
+@RequestMapping("/episode")
+
 public class EpisodeController {
 
     private final EpisodeService episodeService;
@@ -40,4 +41,5 @@ public class EpisodeController {
     public ResponseEntity<EpisodeResponse> createEpisode(@RequestBody CreateEpisodeRequest request) {
         return ResponseEntity.ok(episodeService.createEpisode(request));
     }
+
 }
