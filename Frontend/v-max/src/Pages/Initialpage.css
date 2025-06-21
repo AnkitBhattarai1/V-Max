@@ -6,7 +6,9 @@
   box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   width: 100%;
   background-color: black;
@@ -25,27 +27,24 @@ html, body, #root {
   align-items: center;
 }
 
-/* Top Autoplaying Video Section */
-.video-section {
-  width: 100%;
-  position: relative;
-}
-
+/* Autoplaying Video Section */
 .video-wrapper {
   position: relative;
   width: 100%;
   height: 80vh;
   overflow: hidden;
+  z-index: 1; /* ensures correct stacking */
 }
 
 .video-wrapper video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  pointer-events: none;
+  pointer-events: none; /* allow interaction with overlaid elements */
   user-select: none;
 }
 
+/* Text & Buttons on Top of Video */
 .video-text {
   position: absolute;
   top: 50%;
@@ -54,15 +53,42 @@ html, body, #root {
   color: white;
   text-align: center;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  z-index: 10; /* ensures it's above video */
+  pointer-events: auto; /* make buttons clickable */
 }
 
 .video-text h1 {
-  font-size: 3rem;
-  margin-bottom: 10px;
+  font-size: 2.5rem;
+  margin-bottom: 12px;
 }
 
 .video-text p {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+.button-container {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #00bcd4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+  background-color: #0097a7;
 }
 
 /* FAQ Section */
@@ -79,18 +105,19 @@ html, body, #root {
 }
 
 .faq-item {
-  width: 100%;
-  margin-bottom: 10px;
-  border: 1px solid #333;
+  margin-bottom: 12px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .faq-question {
-  background-color: #333;
-  color: white;
+  background-color: #222;
+  color: #fff;
   width: 100%;
   text-align: left;
   padding: 20px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
   border: none;
   display: flex;
@@ -103,32 +130,10 @@ html, body, #root {
 }
 
 .faq-answer {
-  background-color: #222;
-  padding: 20px;
+  background-color: #111;
+  padding: 18px 20px;
   color: #ccc;
   font-size: 1rem;
-  border-top: 1px solid #444;
-}
-
-.button-container {
-  margin-top: 20px;
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-}
-
-.action-btn {
-  padding: 12px 24px;
-  font-size: 1rem;
-  font-weight: bold;
-  background-color: skyblue;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.action-btn:hover {
-  background-color: #00a4d6;
+  border-top: 1px solid #333;
+  transition: all 0.3s ease;
 }
