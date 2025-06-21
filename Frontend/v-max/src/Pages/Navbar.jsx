@@ -112,6 +112,7 @@ const SidebarContent = ({ ...props }) => {
   
     dispatch(logout())
         .then(() => {
+          
             toast({
                 position: 'top',
                 isClosable: true,
@@ -120,13 +121,15 @@ const SidebarContent = ({ ...props }) => {
                 render: () => (
                     <Box color='white' p={3} bg='blue.500'>
                         Logout successfully! 😊 
+                        
                     </Box>
                 ),
+                
             });
-            
+          
         })
         setTimeout(()=>{
-          navigate(window.location.reload());
+          navigate("/");
         },1000)
        
 };

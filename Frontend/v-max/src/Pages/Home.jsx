@@ -118,7 +118,7 @@ export const Home = () => {
     <>
       <TopNavbar onSearch={handleSearch} />
 
-      <Box ml="190px" pt="30px" p={4} width="calc(110% - 250px)">
+      <Box ml="190px" pt="30px" px={4} width="calc(110% - 250px)">
         {/* Top Welcome Video Section */}
         {!searchTerm && (
           <div className="video-section">

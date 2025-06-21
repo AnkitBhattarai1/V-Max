@@ -1,82 +1,77 @@
-
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
   Box,
   Text,
+  Heading,
   VStack,
-  ButtonGroup,
-  Button,
-  useToast,
-  Container,
-} from "@chakra-ui/react";
-import { VideoPlayer } from "./VideoPlayer";
+  HStack,
+  Tag,
+  Divider,
+} from '@chakra-ui/react';
+import './VideoPlayerPage.css';
 
 export const VideoPlayerPage = () => {
-  const location = useLocation();
-  const { videoUrl, title } = location.state || {}; // Fallback if state is undefined
-  const [rating, setRating] = useState(null);
-  const toast = useToast();
+  const { videoId } = useParams();
 
-  const handleRating = (value) => {
-    setRating(value);
-    toast({
-      title: "Thank you!",
-      description: `You rated this video ${value} out of 5.`,
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
-  };
+  const movies = useSelector((state) => state.movieReducer.movies);
+  const videosMap = useSelector((state) => state.videoReducer.videos);
 
-  if (!videoUrl) {
+  const movie = movies.find((m) => m.videoId === videoId);
+  const video = videosMap[videoId];
+
+  if (!movie || !video) {
     return (
-      <Box textAlign="center" mt={10}>
-        <Text fontSize="lg" color="red.500">
-          No video URL provided. Please go back and select a video.
+      <Box className="video-player-container">
+        <Text fontSize="xl" color="red.500">
+          Video or Movie not found.
         </Text>
       </Box>
     );
   }
 
   return (
-    <Box
-      bg="gray.900"
-      minHeight="100vh"
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      padding={4}
-    >
-      <Container maxW="900px" p={0}> {/* Match maxWidth to VideoPlayer */}
-        <VStack spacing={6} w="100%">
-          <Text
-            fontSize="2xl"
-            fontWeight="bold"
-            color="teal.500"
-            textAlign="center"
-          >
-            {title}
-          </Text>
-          <VideoPlayer videoUrl={videoUrl} posterUrl={""} />
-          <Box textAlign="center" mt={4}>
-            <Text fontSize="lg" color="white" mb={2}>
-              Rate this video
-            </Text>
-            <ButtonGroup size="sm" isAttached variant="outline">
-              {[0, 1, 2, 3, 4, 5].map((value) => (
-                <Button
-                  key={value}
-                  colorScheme={value === rating ? "teal" : "gray"}
-                  onClick={() => handleRating(value)}
-                >
-                  {value}
-                </Button>
-              ))}
-            </ButtonGroup>
-          </Box>
-        </VStack>
-      </Container>
+    <Box className="video-player-container">
+      <Box mb={6}>
+        <video
+          controls
+          src={video.originalVideoUrl || video.videoUrl || video.url || ''}
+          poster={video.thumbnailUrl}
+        >
+          Sorry, your browser doesn't support embedded videos.
+        </video>
+      </Box>
+
+      <VStack align="start" spacing={4} className="video-metadata">
+        <Heading size="lg" className="video-title">{video.title || movie.title}</Heading>
+
+        <Text className="video-description">{movie.description || video.description || "No description available."}</Text>
+
+        <HStack spacing={2} wrap="wrap" className="video-genres">
+          {(movie.genres && movie.genres.length > 0) ? (
+            movie.genres.map((g) => (
+              <Tag key={g} colorScheme="teal" variant="subtle">
+                {g}
+              </Tag>
+            ))
+          ) : (
+            <Tag colorScheme="gray" variant="subtle">No genres</Tag>
+          )}
+        </HStack>
+
+        <Divider />
+
+        <Text><strong>Cast:</strong> {movie.cast || "N/A"}</Text>
+        <Text><strong>Director:</strong> {movie.director || "N/A"}</Text>
+        <Text><strong>Release Date:</strong> {video.releaseDate || "N/A"}</Text>
+        <Text>
+          <strong>Runtime:</strong> {video.duration ? video.duration : "N/A"} minutes
+
+        </Text>
+        <Text><strong>Language:</strong> {video.language || "N/A"}</Text>
+        <Text><strong>Age Rating:</strong> {video.ageRating || "N/A"}</Text>
+      </VStack>
     </Box>
   );
 };
