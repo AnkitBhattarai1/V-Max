@@ -63,7 +63,7 @@ export const Login = () => {
       ),
      
     })
-    navigate(location.state)
+    navigate("/home")
       //  navigate("/")
    })
 

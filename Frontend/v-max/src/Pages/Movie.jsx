@@ -18,7 +18,7 @@ export const Movie = () => {
   const movies = useSelector((store) => store.movieReducer.movies);
   const videosMap = useSelector((store) => store.videoReducer.videos);
   const isLoading = useSelector((store) => store.movieReducer.isLoading);
-  const [filteredVideos, setFilteredVideos] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     dispatch(fetchallmovies());
@@ -45,17 +45,15 @@ export const Movie = () => {
       };
     });
 
-  const handleSearch = (searchTerm) => {
-    setFilteredVideos(
-      combinedVideos.filter((v) =>
+  const filteredVideos = searchTerm
+    ? combinedVideos.filter((v) =>
         v.title.toLowerCase().includes(searchTerm.toLowerCase())
       )
-    );
-  };
+    : combinedVideos;
 
-  useEffect(() => {
-    setFilteredVideos(combinedVideos);
-  }, [combinedVideos]);
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
 
   if (isLoading) {
     return (
@@ -68,7 +66,7 @@ export const Movie = () => {
   return (
     <>
       <TopNavbar onSearch={handleSearch} />
-      <Box ml="200px" pt="70px" p={4} className="movie-container">
+      <Box ml="200px" pt="70px" px={4} className="movie-container">
         <Text fontSize="2xl" fontWeight="bold" mb={4} color="teal.300">
           Movies
         </Text>

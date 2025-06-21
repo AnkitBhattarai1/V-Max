@@ -1,30 +1,35 @@
 import React from "react";
-import { Box, Text, Image } from "@chakra-ui/react";
-import "./VideoCard.css";
+import { Link } from "react-router-dom";
 
-export const VideoCard = ({ video }) => {
-  return (
-    <Box
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      bg="#111"
-      boxShadow="lg"
-      className="video-card"
-      _hover={{ transform: "scale(1.02)", cursor: "pointer" }}
+export const VideoCard = ({ video }) => (
+  <Link
+    to={`/video/${video.id}`}
+    style={{
+      textDecoration: "none",
+      cursor: "pointer",
+      display: "inline-block",
+      margin: "10px",
+    }}
+  >
+    <div
+      style={{
+        width: "300px",
+        border: "1px solid #ccc",
+        transition: "box-shadow 0.2s ease",
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 4px 15px rgba(0,0,0,0.2)")}
+      onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
     >
-      <Image
+      <img
         src={video.thumbnailUrl}
         alt={video.title}
-        width="100%"
-        height="170px"
-        objectFit="cover"
+        style={{ width: "100%", height: "170px", objectFit: "cover" }}
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = "https://dummyimage.com/300x170/000/fff&text=No+Image";
+        }}
       />
-      <Box p={4}>
-        <Text fontSize="lg" fontWeight="bold" color="teal.300" mb={2}>
-          {video.title}
-        </Text>
-      </Box>
-    </Box>
-  );
-};
+      <h3 style={{ color: "#fff", padding: "8px" }}>{video.title}</h3>
+    </div>
+  </Link>
+);

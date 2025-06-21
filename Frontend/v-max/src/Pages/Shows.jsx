@@ -27,7 +27,7 @@ export const Shows = () => {
     <>
       <TopNavbar onSearch={handleSearch} />
 
-      <Box ml="200px" pt="90px" p={4} minH="100vh">
+      <Box ml="200px" pt="90px" px={4} minH="100vh">
         <Text fontSize="2xl" mb={4} color="white">
           Series List
         </Text>
