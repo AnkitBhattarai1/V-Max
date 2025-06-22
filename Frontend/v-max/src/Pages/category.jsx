@@ -6,6 +6,9 @@ import {
   SimpleGrid,
   CircularProgress,
   Center,
+  Button,
+  HStack,
+  IconButton,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchallmovies } from "../Redux/MovieReducer/Action";
@@ -20,9 +23,9 @@ export const Category = () => {
   const movies = useSelector((store) => store.movieReducer.movies);
   const videosMap = useSelector((store) => store.videoReducer.videos);
   const isLoading = useSelector((store) => store.movieReducer.isLoading);
-
-  // State to hold genre -> videos mapping
   const [genreMap, setGenreMap] = useState({});
+  const [selectedGenre, setSelectedGenre] = useState("All");
+  const genreList = ["All", ...Object.keys(genreMap)];
 
   // Fetch all movies on mount
   useEffect(() => {
@@ -86,22 +89,57 @@ export const Category = () => {
             No genres or videos available.
           </Text>
         ) : (
-          Object.entries(genreMap).map(([genre, videos]) => (
-            <Box key={genre} mb={12}>
-              <Heading mb={4} color="teal.400" fontSize="2xl" textTransform="capitalize">
-                {genre}
-              </Heading>
-              {videos.length === 0 ? (
-                <Text>No videos in this genre.</Text>
-              ) : (
-                <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-                  {videos.map((video) => (
-                    <VideoCard key={video.id} video={video} />
-                  ))}
-                </SimpleGrid>
+          <>
+            <HStack spacing={3} overflowX="auto" pb={6} className="genre-scrollbar">
+              {genreList.map((genre) => (
+                <Button
+                  key={genre}
+                  onClick={() => setSelectedGenre(genre)}
+                  variant={selectedGenre === genre ? "solid" : "outline"}
+                  colorScheme={selectedGenre === genre ? "teal" : "gray"}
+                  borderRadius="full"
+                  px={6}
+                  py={2}
+                  fontWeight={selectedGenre === genre ? "bold" : "normal"}
+                  bg={selectedGenre === genre ? "teal.500" : "gray.100"}
+                  color={selectedGenre === genre ? "white" : "black"}
+                  _hover={{ bg: selectedGenre === genre ? "teal.600" : "gray.200" }}
+                  minW="max-content"
+                >
+                  {genre}
+                </Button>
+              ))}
+            </HStack>
+            {selectedGenre === "All"
+              ? genreList.slice(1).map((genre) => (
+                  <Box key={genre} mb={12}>
+                    {/* Removed genre heading below genre buttons */}
+                    {genreMap[genre].length === 0 ? (
+                      <Text>No videos in this genre.</Text>
+                    ) : (
+                      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+                        {genreMap[genre].map((video) => (
+                          <VideoCard key={video.id} video={video} />
+                        ))}
+                      </SimpleGrid>
+                    )}
+                  </Box>
+                ))
+              : (
+                <Box mb={12}>
+                  {/* Removed genre heading below genre buttons */}
+                  {genreMap[selectedGenre] && genreMap[selectedGenre].length === 0 ? (
+                    <Text>No videos in this genre.</Text>
+                  ) : (
+                    <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+                      {genreMap[selectedGenre] && genreMap[selectedGenre].map((video) => (
+                        <VideoCard key={video.id} video={video} />
+                      ))}
+                    </SimpleGrid>
+                  )}
+                </Box>
               )}
-            </Box>
-          ))
+          </>
         )}
       </Box>
     </>
