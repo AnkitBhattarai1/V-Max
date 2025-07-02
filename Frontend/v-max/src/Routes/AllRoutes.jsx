@@ -5,6 +5,7 @@ import { SignUp } from "../Pages/SignUp";
 import { Login } from "../Pages/Login";
 import { Admin } from "../Pages/Admin";
 import { AdminPage } from "../Pages/AdminPage";
+import { PrivateRoute } from "../Components/PrivateRoute";
 
 import { VideoPlayerPage } from "../Pages/VideoPlayerPage";
 import { Movie } from "../Pages/Movie";
@@ -18,7 +19,7 @@ export const AllRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Initialpage />} />
-      <Route path="/Home" element={<Home />} />
+      <Route path="/Home" element={<PrivateRoute><Home /></PrivateRoute>} />
       <Route path="/Login" element={<Login />} />
       <Route path="/SignUp" element={<SignUp />} />
       <Route path="/Admin" element={<Admin />} />
