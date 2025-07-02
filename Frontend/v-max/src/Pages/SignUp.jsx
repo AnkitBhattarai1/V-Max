@@ -13,11 +13,14 @@ import {
   Image,
   Flex,
   Box,
-  HStack
+  HStack,
+  Text
 } from '@chakra-ui/react';
+import Logo from "../Imges/PLY.png"
 import { useDispatch } from 'react-redux';
 import { useToast } from '@chakra-ui/react';
 import { useNavigate ,useLocation} from 'react-router-dom';
+import { Container } from '@chakra-ui/react';
 
 const initialState = {
   first_name: '',
@@ -62,7 +65,7 @@ export const SignUp = () => {
         isClosable: true,
         duration: 2000,
         status: 'warning',
-        render: () => <Box color="white" bg="blue.500" p="20px">Please fill out all required fields</Box>
+        render: <Box color="white" bg="blue.500" p="20px">Please fill out all required fields</Box>
       });
       return;
     }
@@ -74,7 +77,7 @@ export const SignUp = () => {
         isClosable: true,
         duration: 2000,
         status: 'error',
-        render: () => <Box color="white" bg="red.500" p="20px">Email must be a valid Gmail address</Box>
+        render: <Box color="white" bg="red.500" p="20px">Email must be a valid Gmail address</Box>
       });      
       return;      
     }
@@ -87,7 +90,7 @@ export const SignUp = () => {
         isClosable: true,
         duration: 2000,
         status: 'error',
-        render: () => <Box color="white" bg="green.500" p="20px">Verification Code sent successful</Box>
+        render: <Box color="white" bg="green.500" p="20px">Verification Code sent successful</Box>
       });  
         setStep(2); // Move to verification step
         }
@@ -98,7 +101,7 @@ export const SignUp = () => {
         isClosable: true,
         duration: 2000,
         status: 'error',
-        render: () => <Box color="white" bg="red.500" p="20px">Failed to send verification code</Box>
+        render: <Box color="white" bg="red.500" p="20px">Failed to send verification code</Box>
     });  
       }
       };
@@ -111,7 +114,7 @@ export const SignUp = () => {
         isClosable: true,
         duration: 2000,
         status: 'error',
-        render: () => <Box color="white" bg="red.500" p="20px">The code must be 6 digits</Box>
+        render: <Box color="white" bg="red.500" p="20px">The code must be 6 digits</Box>
       });
           return;
       }
@@ -124,7 +127,7 @@ export const SignUp = () => {
         isClosable: true,
         duration: 2000,
         status: 'success',
-        render: () => <Box color="white" bg="green.500" p="20px">Verification successful!</Box>
+        render: <Box color="white" bg="green.500" p="20px">Verification successful!</Box>
       });
             setStep(3); 
         }
@@ -140,7 +143,7 @@ export const SignUp = () => {
         isClosable: true,
         duration: 2000,
         status: 'warning',
-        render: () => <Box color="white" bg="blue.500" p="20px">Please set a password</Box>
+        render: <Box color="white" bg="blue.500" p="20px">Please set a password</Box>
       });
       return;
     }
@@ -169,49 +172,43 @@ export const SignUp = () => {
   };
 
   return (
-    <Box as="main" height="auto" w="98.5vw" paddingLeft="9%" bg="#000014" border="0.1px solid gray">
-      <Stack
-        minH="70vh"
-        paddingLeft="8%"
-        marginTop="3%"
-        direction={{ base: 'column-reverse', md: 'row' }}
-        border="1px solid gray"
-        background="transparent"
-        color="white"
-        backdropFilter="blur(1px)"
-      >
-        <Flex flex={1}>
-          <Image alt="Cover image" objectFit="cover" src="https://emby.media/community/uploads/inline/1124/57dec9263974d_Produce7.gif" />
-        </Flex>
-        <Flex p={6} flex={1} align="center" justifyContent="center">
-          <Stack spacing={2}>
-            <Stack align="center">
-              <Heading fontSize="2xl" color="gray">Sign up for an account</Heading>
-            </Stack>
+    <Box as="main" w="100vw" minH="100vh" display="flex" alignItems="center" justifyContent="center" bgGradient="linear(to-br, #000014 60%, #1a237e 100%)">
+      <Container maxW="lg" p={{ base: 5, md: 10 }} centerContent>
+        <Flex align="center" justify="center" direction="column">
+          <Stack spacing={6} align="center">
+            <Image w="80px" src={Logo} alt="logo" mb={2} borderRadius="full" boxShadow="lg" border="2px solid #2196f3" />
+            <Heading fontSize="2xl" color="#fff" fontWeight="bold" letterSpacing="wide" textShadow="0 2px 8px #1a237e">Create Your Account</Heading>
+            <Text color="gray.300" fontSize="md">Sign up to get started with V-Max</Text>
             <VStack
               as="form"
-              spacing={6}
               boxSize={{ base: 'xs', sm: 'sm', md: 'md' }}
-              h="max-content !important"
-              bg={useColorModeValue('#000014', 'gray.700')}
-              color="gray"
-              rounded="lg"
-              boxShadow="lg"
+              minH="700px"
+              bg={useColorModeValue('#0b0b1f', 'gray.800')}
+              rounded="2xl"
+              border="1.5px solid #2196f3"
+              boxShadow="2xl"
+              color="#fff"
               p={{ base: 5, sm: 10 }}
+              spacing={6}
+              w="100%"
+              justify="center"
             >
               {step === 1 && (
                 <>
-                <FormControl id="email">
-                    <FormLabel>Email</FormLabel>
-                    <Input rounded="md" type="email" placeholder="Enter your Gmail address" name="email" value={user.email} onChange={handleChange} />
+                  <FormControl id="email">
+                    <FormLabel color="#90caf9" fontWeight="bold" fontSize="lg">Email</FormLabel>
+                    <Input rounded="lg" type="email" placeholder="Enter your Gmail address" name="email" value={user.email} onChange={handleChange} bg="#181a2a" color="#fff" borderColor="#2196f3" _placeholder={{ color: 'gray.400' }} fontSize="md" boxShadow="0 0 8px #2196f3" />
                   </FormControl>
-                  
                   <Button
-                    bg="blue.500"
-                    color="white"
-                    _hover={{ bg: 'blue.300' }}
-                    rounded="md"
+                    bgGradient="linear(to-r, #2196f3, #21cbf3)"
+                    color="#fff"
+                    _hover={{ bgGradient: 'linear(to-r, #21cbf3, #2196f3)', boxShadow: '0 0 16px #21cbf3' }}
+                    rounded="lg"
                     w="100%"
+                    fontWeight="extrabold"
+                    fontSize="xl"
+                    letterSpacing="wider"
+                    shadow="md"
                     onClick={handleDetailsSubmit}
                   >
                     Send Verification Code
@@ -221,8 +218,8 @@ export const SignUp = () => {
               {step === 2 && (
                 <>
                   <FormControl>
-                    <FormLabel>Enter Verification Code</FormLabel>
-                    <HStack spacing={2}>
+                    <FormLabel color="#90caf9" fontWeight="bold" fontSize="lg">Enter Verification Code</FormLabel>
+                    <HStack spacing={3} justifyContent="center">
                       {user.verificationCode.map((digit, index) => (
                         <Input
                           key={index}
@@ -232,18 +229,29 @@ export const SignUp = () => {
                           value={digit}
                           onChange={(e) => handleCodeChange(index, e.target.value)}
                           textAlign="center"
-                          rounded="md"
-                          width="3rem"
+                          rounded="lg"
+                          width="3.2rem"
+                          height="3.2rem"
+                          fontSize="2xl"
+                          bg="#181a2a"
+                          color="#fff"
+                          borderColor="#21cbf3"
+                          boxShadow="0 0 8px #21cbf3"
+                          _focus={{ borderColor: '#2196f3', boxShadow: '0 0 16px #2196f3' }}
                         />
                       ))}
                     </HStack>
                   </FormControl>
                   <Button
-                    bg="blue.500"
-                    color="white"
-                    _hover={{ bg: 'blue.300' }}
-                    rounded="md"
+                    bgGradient="linear(to-r, #2196f3, #21cbf3)"
+                    color="#fff"
+                    _hover={{ bgGradient: 'linear(to-r, #21cbf3, #2196f3)', boxShadow: '0 0 16px #21cbf3' }}
+                    rounded="lg"
                     w="100%"
+                    fontWeight="extrabold"
+                    fontSize="xl"
+                    letterSpacing="wider"
+                    shadow="md"
                     onClick={handleCodeSubmit}
                   >
                     Verify Code
@@ -253,59 +261,62 @@ export const SignUp = () => {
               {step === 3 && (
                 <>
                   <FormControl id="FirstName">
-                    <FormLabel>First Name</FormLabel>
-                    <Input rounded="md" type="text" placeholder="Enter your First Name" name="first_name" value={user.first_name} onChange={handleChange} />
+                    <FormLabel color="#90caf9" fontWeight="bold">First Name</FormLabel>
+                    <Input rounded="lg" type="text" placeholder="Enter your First Name" name="first_name" value={user.first_name} onChange={handleChange} bg="#181a2a" color="#fff" borderColor="#2196f3" _placeholder={{ color: 'gray.400' }} fontSize="md" />
                   </FormControl>
-
                   <FormControl id="MiddleName">
-                    <FormLabel>Middle Name</FormLabel>
-                    <Input rounded="md" type="text" placeholder="Enter your Middle Name" name="middle_name" value={user.middle_name} onChange={handleChange} />
+                    <FormLabel color="#90caf9" fontWeight="bold">Middle Name</FormLabel>
+                    <Input rounded="lg" type="text" placeholder="Enter your Middle Name" name="middle_name" value={user.middle_name} onChange={handleChange} bg="#181a2a" color="#fff" borderColor="#2196f3" _placeholder={{ color: 'gray.400' }} fontSize="md" />
                   </FormControl>
-
                   <FormControl id="LastName">
-                    <FormLabel>Last Name</FormLabel>
-                    <Input rounded="md" type="text" placeholder="Enter your Last Name" name="last_name" value={user.last_name} onChange={handleChange} />
+                    <FormLabel color="#90caf9" fontWeight="bold">Last Name</FormLabel>
+                    <Input rounded="lg" type="text" placeholder="Enter your Last Name" name="last_name" value={user.last_name} onChange={handleChange} bg="#181a2a" color="#fff" borderColor="#2196f3" _placeholder={{ color: 'gray.400' }} fontSize="md" />
                   </FormControl>
-
                   <FormControl id="Email">
-                    <FormLabel>Email</FormLabel>
-                    <Input rounded="md" type="email" placeholder="Enter your Email" name="email" value={user.email} onChange={handleChange} />
+                    <FormLabel color="#90caf9" fontWeight="bold">Email</FormLabel>
+                    <Input rounded="lg" type="email" placeholder="Enter your Email" name="email" value={user.email} onChange={handleChange} bg="#181a2a" color="#fff" borderColor="#2196f3" _placeholder={{ color: 'gray.400' }} fontSize="md" />
                   </FormControl>
-
-
-
                   <FormControl id="DateOfBirth">
-                    <FormLabel>Date of Birth</FormLabel>
-                    <Input rounded="md" type="date" name="dob" value={user.dob} onChange={handleChange} />
+                    <FormLabel color="#90caf9" fontWeight="bold">Date of Birth</FormLabel>
+                    <Input rounded="lg" type="date" name="dob" value={user.dob} onChange={handleChange} bg="#181a2a" color="#fff" borderColor="#2196f3" fontSize="md" />
                   </FormControl>
-
                   <FormControl id="password">
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel color="#90caf9" fontWeight="bold">Password</FormLabel>
                     <Input
-                      rounded="md"
+                      rounded="lg"
                       type="password"
                       placeholder="Set your password"
                       name="password"
                       value={user.password}
                       onChange={handleChange}
+                      bg="#181a2a"
+                      color="#fff"
+                      borderColor="#2196f3"
+                      _placeholder={{ color: 'gray.400' }}
+                      fontSize="md"
                     />
                   </FormControl>
                   <Button
-                    bg="blue.500"
-                    color="white"
-                    _hover={{ bg: 'blue.300' }}
-                    rounded="md"
+                    bgGradient="linear(to-r, #2196f3, #21cbf3)"
+                    color="#fff"
+                    _hover={{ bgGradient: 'linear(to-r, #21cbf3, #2196f3)', boxShadow: '0 0 16px #21cbf3' }}
+                    rounded="lg"
                     w="100%"
+                    fontWeight="extrabold"
+                    fontSize="xl"
+                    letterSpacing="wider"
+                    shadow="md"
                     onClick={handlePasswordSubmit}
                   >
                     Sign Up
                   </Button>
+                  <Text color="#b3e5fc" w="100%" textAlign="center" fontWeight="bold" fontSize="md">Already have an account? <a href='/Login' style={{color:'#21cbf3', fontWeight:'bold', textDecoration:'underline'}}>Login</a></Text>
                 </>
               )}
             </VStack>
           </Stack>
         </Flex>
-      </Stack>
+      </Container>
     </Box>
   );
 };

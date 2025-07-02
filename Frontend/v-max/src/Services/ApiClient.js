@@ -1,20 +1,29 @@
 
 
 import axios from "axios";
+import { BASE_URL } from "../Constants/Urls";
 
-const BASE_URL='http://localhost:9090'
+// Create Axios instance
 const apiClient = axios.create({
-    baseURL: BASE_URL,
+  baseURL: BASE_URL,
 });
 
 // Add a request interceptor
-apiClient.interceptors.request.use((config) => {
+apiClient.interceptors.request.use(
+  (config) => {
     const token = localStorage.getItem("jwtToken");
     if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
-});
+  },
+  (error) => {
+    return Promise.reject(error); // Don't forget to handle errors
+  }
+);
+
+
+
 
 // Example usage
 export const getUserData = async () => {
@@ -25,3 +34,4 @@ export const getUserData = async () => {
         console.error("Error fetching user data:", error.response || error);
     }
 };
+export default apiClient;

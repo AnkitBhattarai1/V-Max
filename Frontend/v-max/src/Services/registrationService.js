@@ -102,8 +102,7 @@ export const registerUser = async(user) =>{
             }
         );
 
-
-    localStorage.setItem("jwtToken",res1.token);
+  
    
         const res2 = await axios.post(
             `${BASE_URL}/user/addUser`,

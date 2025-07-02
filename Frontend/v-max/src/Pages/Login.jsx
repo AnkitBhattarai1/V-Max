@@ -28,7 +28,7 @@ import "./Navbar.css"
 export const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
-  const [email,setemail]=useState("User@123")
+  const [email_or_username,setemail_or_username]=useState("User@123")
   const [password,setpassword]=useState("User@123")
   const dispatch=useDispatch()
   const location=useLocation()
@@ -44,7 +44,7 @@ export const Login = () => {
  
  const handleLogin=()=>{
    const userData={
-       email,
+       email_or_username,
        password
    }
    console.log(userData)
@@ -76,46 +76,41 @@ export const Login = () => {
 
 
   return (
-    <Box as="main" w={"98.5vw"} paddingLeft={"13%"} height={"100Vh"} id='mainDiv'    bg={useColorModeValue('#000014', 'gray.800')} >
-    <Container maxW="6xl" p={{ base: 5, md: 10 }}>
-      <Center>
-        <Stack spacing={4}>
-          <Stack align="center">
-           
-          </Stack>
-          <VStack
-            as="form"
-            boxSize={{ base: 'xs', sm: 'sm', md: 'md' }}
-            h="max-content !important"
-            bg={useColorModeValue('#0b0b1f', 'gray.700')}
-            rounded="lg"
-            border={"1px solid gray"}
-            boxShadow="lg"
-            color={"gray"}
-            p={{ base: 5, sm: 10 }}
-            spacing={6}
-          >
-            <Heading fontSize="2xl" color={"gray"} >Login in to your account</Heading>
-             <Image w={"30%"} src={Logo} alt={"logo"} />
-            <VStack spacing={4} w="100%">
-            
+    <Box as="main" w="100vw" minH="100vh" display="flex" alignItems="center" justifyContent="center" bgGradient="linear(to-br, #000014 60%, #1a237e 100%)" id='mainDiv'>
+      <Container maxW="lg" p={{ base: 5, md: 10 }}>
+        <Center>
+          <Stack spacing={6} align="center">
+            <Image w="80px" src={Logo} alt="logo" mb={2} borderRadius="full" boxShadow="lg" border="2px solid #2196f3" />
+            <Heading fontSize="2xl" color="#fff" fontWeight="bold" letterSpacing="wide" textShadow="0 2px 8px #1a237e">Welcome Back!</Heading>
+            <Text color="gray.300" fontSize="md">Login to your account to continue</Text>
+            <VStack
+              as="form"
+              boxSize={{ base: 'xs', sm: 'sm', md: 'md' }}
+              bg={useColorModeValue('#0b0b1f', 'gray.800')}
+              rounded="2xl"
+              border="1.5px solid #2196f3"
+              boxShadow="2xl"
+              color="#fff"
+              p={{ base: 5, sm: 10 }}
+              spacing={6}
+              w="100%"
+            >
               <FormControl id="email">
-                <FormLabel>Email</FormLabel>
-                <Input rounded="md" type="email" value={email} onChange={(e)=>setemail(e.target.value)} placeholder={"Enter your email"} />
+                <FormLabel color="#90caf9">Email</FormLabel>
+                <Input rounded="md" type="email" value={email_or_username} onChange={(e)=>setemail_or_username(e.target.value)} placeholder="Enter your email" bg="#181a2a" color="#fff" borderColor="#2196f3" _placeholder={{ color: 'gray.400' }} />
               </FormControl>
               <FormControl id="password">
-                <FormLabel>Password</FormLabel>
-                <InputGroup size="md" >
-                  <Input rounded="md" type={show ? 'text' : 'password'} value={password} onChange={(e)=>setpassword(e.target.value)}  placeholder={"Enter your password"} />
+                <FormLabel color="#90caf9">Password</FormLabel>
+                <InputGroup size="md">
+                  <Input rounded="md" type={show ? 'text' : 'password'} value={password} onChange={(e)=>setpassword(e.target.value)} placeholder="Enter your password" bg="#181a2a" color="#fff" borderColor="#2196f3" _placeholder={{ color: 'gray.400' }} />
                   <InputRightElement width="4.5rem">
                     <Button
                       h="1.75rem"
                       size="sm"
                       rounded="md"
                       bg={useColorModeValue('blue.300', 'gray.700')}
-                      _hover={{
-                        bg: useColorModeValue('blue.400', 'gray.800')
-                      }}
+                      _hover={{ bg: useColorModeValue('blue.400', 'gray.800') }}
+                      color="#fff"
                       onClick={handleClick}
                     >
                       {show ? 'Hide' : 'Show'}
@@ -123,32 +118,29 @@ export const Login = () => {
                   </InputRightElement>
                 </InputGroup>
               </FormControl>
-            </VStack>
-            <VStack w="100%">
               <Stack direction="row" justifyContent="space-between" w="100%">
-                <Checkbox colorScheme="blue" size="md">
-                  Remember me
-                </Checkbox>
-                <Link fontSize={{ base: 'md', sm: 'md' }}>Forgot password?</Link>
+                <Checkbox colorScheme="blue" size="md" color="#90caf9">Remember me</Checkbox>
+                <Link fontSize={{ base: 'md', sm: 'md' }} color="#90caf9" _hover={{ color: '#2196f3', textDecoration: 'underline' }}>Forgot password?</Link>
               </Stack>
               <Button
-                bg="blue.300"
-                color="white"
-                _hover={{
-                  bg: 'blue.500'
-                }}
+                bgGradient="linear(to-r, #2196f3, #21cbf3)"
+                color="#fff"
+                _hover={{ bgGradient: 'linear(to-r, #21cbf3, #2196f3)', boxShadow: '0 0 10px #2196f3' }}
                 rounded="md"
                 w="100%"
+                fontWeight="bold"
+                fontSize="lg"
+                letterSpacing="wide"
                 onClick={handleLogin}
               >
                 Login
               </Button>
-              <Text >Are you Admin <a href='/Admin' style={{color:"blue"}}>Clickhere</a> </Text>
+              <Text color="gray.300">Are you Admin? <a href='/Admin' style={{color:'#21cbf3', fontWeight:'bold'}}>Click here</a></Text>
+              <Text color="gray.400">Don't have an account? <a href='/SignUp' style={{color:'#2196f3', fontWeight:'bold'}}>Sign Up</a></Text>
             </VStack>
-          </VStack>
-        </Stack>
-      </Center>
-    </Container>
+          </Stack>
+        </Center>
+      </Container>
     </Box>
   );
 };

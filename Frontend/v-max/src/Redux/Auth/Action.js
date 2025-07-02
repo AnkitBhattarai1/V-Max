@@ -1,14 +1,14 @@
 import axios from "axios"
 import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT_SUCCESS, POST_SIGN_SUCCESS, } from "./ActionTypes"
 
-
+import { BASE_URL } from "../../Constants/Urls"
 //Login post request 
 export const login=(userData)=>(dispatch)=>{
     dispatch({type:LOGIN_REQUEST})
-    return axios.post(`https://movies-data-fdb6.onrender.com/users/login`,userData)
+    return axios.post(`${BASE_URL}/auth/getToken`,userData)
     .then((res)=>{
         dispatch({type:LOGIN_SUCCESS, Name:res.data.Name, paylaod: res.data.token, UserId:res.data.UserId, Account_info:res.data.Account_info})
-        
+        localStorage.setItem("jwtToken",res.data.token)
         console.log(res.data)
     })
     .catch((err)=>{
