@@ -8,6 +8,10 @@ import {
   STREAM_VIDEO_SUCCESS,
   VIDEO_FAILURE,
   VIDEO_REQUEST,
+  RECOMMENDATION_REQUEST,
+RECOMMENDATION_SUCCESS,
+RECOMMENDATION_FAILURE,
+GET_THUMBNAIL_SUCCESS,
 } from "./ActionTypes";
 
 import {
@@ -19,6 +23,7 @@ import {
   getThumbnail,
   getVideosByIds,
 } from "../../Services/VideoService";
+import { getRecommendations } from "../../Services/RatingandRecommendation";
 
 export const getVideos = () => (dispatch) => {
   dispatch({ type: VIDEO_REQUEST });
@@ -103,4 +108,20 @@ export const getvideosbyids = (ids) => (dispatch) => {
     .catch(() => {
       dispatch({ type: VIDEO_FAILURE });
     });
+};
+export const fetchRecommendations = (userId, N) => async (dispatch) => {
+  dispatch({ type: RECOMMENDATION_REQUEST });
+
+  try {
+    const recommendedIds = await getRecommendations(userId, N); // just an array of IDs
+
+    if (recommendedIds.length > 0) {
+      const videoObjs = await getVideosByIds(recommendedIds); // fetch full video data
+      dispatch({ type: RECOMMENDATION_SUCCESS, payload: videoObjs });
+    } else {
+      dispatch({ type: RECOMMENDATION_SUCCESS, payload: [] }); // No recs
+    }
+  } catch (err) {
+    dispatch({ type: RECOMMENDATION_FAILURE });
+  }
 };

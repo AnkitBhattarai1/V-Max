@@ -29,7 +29,7 @@
 
 .video-description {
   font-size: 1rem;
-  color: #4a5568; /* gray */
+  color: #f7f8fa; /* gray */
   line-height: 1.5;
   margin-bottom: 12px;
 }
@@ -39,7 +39,7 @@
 }
 
 .video-metadata strong {
-  color: #2d3748; /* dark gray */
+  color: #f7f8fa; /* dark gray */
 }
 
 .video-metadata p,

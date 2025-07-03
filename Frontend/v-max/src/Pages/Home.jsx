@@ -1,12 +1,14 @@
+// src/Pages/Home.jsx
 import React, { useState, useEffect, useRef } from "react";
-import { TopNavbar } from "./topnavbar";
 import { useDispatch, useSelector } from "react-redux";
+import { TopNavbar } from "./topnavbar";
 import { fetchallmovies } from "../Redux/MovieReducer/Action";
-import { getVideo } from "../Redux/VideoReducer/Action";
+import { getVideo, fetchRecommendations } from "../Redux/VideoReducer/Action";
 import {
   SimpleGrid,
   Box,
-  Text,
+  Heading,
+  Divider,
   Center,
   CircularProgress,
 } from "@chakra-ui/react";
@@ -16,96 +18,114 @@ import home from "../Imges/Home.mp4";
 import home1 from "../Imges/Home1.mp4";
 import home2 from "../Imges/Home2.mp4";
 import home3 from "../Imges/Home3.mp4";
-
 import "./Home.css";
 
 const videoFiles = [home, home1, home2, home3];
 
 export const Home = () => {
-  const dispatch = useDispatch();
-  const movies = useSelector((store) => store.movieReducer.movies);
-  const isLoading = useSelector((store) => store.movieReducer.isLoading);
-  const videosMap = useSelector((store) => store.videoReducer.videos);
+  const dispatch        = useDispatch();
+  const movies          = useSelector((s) => s.movieReducer.movies);
+  const isLoading       = useSelector((s) => s.movieReducer.isLoading);
+  const videosMap       = useSelector((s) => s.videoReducer.videos);
+  const recommended     = useSelector((s) => s.videoReducer.recommendedvideos);
+  const auth            = useSelector((s) => s.authReducer);
 
-  const [filteredVideos, setFilteredVideos] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const videoRefs = useRef([]);
+  // local UI state
+  const [filtered,  setFiltered]  = useState([]);
+  const [search,    setSearch]    = useState("");
+  const [userId,    setUserId]    = useState(null);      // NEW
+  const videoRefs                = useRef([]);
 
+  /* ──────────────────────────────────────────────
+     1.  Fetch all movies once
+  ────────────────────────────────────────────── */
+  useEffect(() => { dispatch(fetchallmovies()); }, [dispatch]);
+
+  /* ──────────────────────────────────────────────
+     2.  For every movie, fetch its video meta
+  ────────────────────────────────────────────── */
   useEffect(() => {
-    dispatch(fetchallmovies());
-  }, [dispatch]);
+    if (!movies?.length) return;
+    movies.forEach(({ videoId }) => videoId && dispatch(getVideo(videoId)));
+  }, [movies, dispatch]);
 
+  /* ──────────────────────────────────────────────
+     3.  Fetch self‑ID (like you did in VideoPlayerPage)
+  ────────────────────────────────────────────── */
   useEffect(() => {
-    if (movies && movies.length > 0) {
-      movies.forEach((movie) => {
-        if (movie.videoId) {
-          dispatch(getVideo(movie.videoId));
+    const token = auth?.token || localStorage.getItem("jwtToken");
+    if (!token) return;                    // user not logged in
+
+    const fetchSelfId = async () => {
+      try {
+        const res = await fetch(
+          "https://api.bhattaraiankit.com.np/user/selfId",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        if (!res.ok) throw new Error("selfId request failed");
+
+        const raw = await res.text();
+        let id;
+        try { id = JSON.parse(raw).userId || JSON.parse(raw); }
+        catch { id = raw; }
+
+        if (id) {
+          setUserId(id);                   // save locally
+          dispatch(fetchRecommendations(id, 5)); // fire recs
         }
-      });
-    }
-  }, [dispatch, movies]);
+      } catch (err) {
+        console.error("Could not fetch self‑ID:", err);
+      }
+    };
 
-  const fallbackVideos = [
-    {
-      id: "1",
-      title: "Test Movie 1",
-      duration: "2:30",
-      views: "1.2k",
-      uploadDate: "2023-01-01",
-      category: "Action",
-    },
-    {
-      id: "2",
-      title: "Test Movie 2",
-      duration: "3:45",
-      views: "980",
-      uploadDate: "2023-02-15",
-      category: "Drama",
-    },
-  ];
+    fetchSelfId();
+  }, [auth?.token, dispatch]);
 
-  const combinedVideos =
-    movies && movies.length > 0
-      ? movies.map((movie) => {
-          const videoData = videosMap[movie.videoId] || {};
+  /* ──────────────────────────────────────────────
+     4.  Combine movie + video data
+  ────────────────────────────────────────────── */
+  const combined =
+    movies?.length
+      ? movies.map((m) => {
+          const v = videosMap[m.videoId] || {};
           return {
-            id: movie.videoId || "no-id",
-            title: videoData.title || movie.title || "Untitled",
-            thumbnailUrl: videoData.thumbnailUrl || "https://via.placeholder.com/300x170?text=No+Thumbnail",
-            duration: videoData.duration || "N/A",
-            views: videoData.views || "N/A",
-            uploadDate: videoData.uploadDate || "N/A",
-            category: movie.genres?.join(", ") || "Uncategorized",
+            id:         m.videoId     || "no‑id",
+            title:      v.title       || m.title || "Untitled",
+            thumbnailUrl:  v.thumbnailUrl || "https://via.placeholder.com/300x170?text=No+Thumbnail",
+            duration:   v.duration    || "N/A",
+            views:      v.views       || "N/A",
+            uploadDate: v.uploadDate  || "N/A",
+            category:   m.genres?.join(", ") || "Uncategorized",
           };
         })
-      : fallbackVideos;
+      : [];
 
+  /* ──────────────────────────────────────────────
+     5.  Filter on search term
+  ────────────────────────────────────────────── */
   useEffect(() => {
-    if (!searchTerm) {
-      setFilteredVideos(combinedVideos);
-    } else {
-      const filtered = combinedVideos.filter((video) =>
-        video.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredVideos(filtered);
-    }
-  }, [combinedVideos, searchTerm]);
+    if (!search) setFiltered(combined);
+    else         setFiltered(
+      combined.filter((v) =>
+        v.title.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [combined, search]);
 
-  const handleVideoEnd = (index) => {
-    const nextIndex = index + 1;
-    if (nextIndex < videoRefs.current.length) {
-      videoRefs.current[nextIndex].parentElement.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
-      videoRefs.current[nextIndex].play();
+  /* ──────────────────────────────────────────────
+     6.  Helpers
+  ────────────────────────────────────────────── */
+  const handleVideoEnd = (i) => {
+    const nxt = i + 1;
+    if (nxt < videoRefs.current.length) {
+      videoRefs.current[nxt].parentElement.scrollIntoView({ behavior: "smooth" });
+      videoRefs.current[nxt].play();
     }
   };
 
-  const handleSearch = (term) => {
-    setSearchTerm(term);
-  };
-
+  /* ──────────────────────────────────────────────
+     7.  Loading splash
+  ────────────────────────────────────────────── */
   if (isLoading) {
     return (
       <Center h="100vh" ml="200px">
@@ -116,27 +136,26 @@ export const Home = () => {
 
   return (
     <>
-      <TopNavbar onSearch={handleSearch} />
+      <TopNavbar onSearch={setSearch} />
 
       <Box ml="190px" pt="30px" px={4} width="calc(110% - 250px)">
-        {/* Top Welcome Video Section */}
-        {!searchTerm && (
+        {/* HERO – welcome loops */}
+        {!search && (
           <div className="video-section">
             <div style={{ display: "flex", gap: "1rem" }}>
-              {videoFiles.map((file, index) => (
-                <div key={index} className="video-wrapper">
+              {videoFiles.map((src, i) => (
+                <div key={i} className="video-wrapper">
                   <video
-                    ref={(el) => (videoRefs.current[index] = el)}
-                    src={file}
+                    ref={(el) => (videoRefs.current[i] = el)}
+                    src={src}
                     className="video-element"
                     autoPlay
                     muted
-                    loop={false}
                     playsInline
-                    onEnded={() => handleVideoEnd(index)}
+                    onEnded={() => handleVideoEnd(i)}
                   />
                   <div className="video-text">
-                    <div>Welcome to V-MAX,</div>
+                    <div>Welcome to V‑MAX,</div>
                     <div>Your Ultimate Video Partner</div>
                   </div>
                 </div>
@@ -145,16 +164,30 @@ export const Home = () => {
           </div>
         )}
 
-        {/* Movie Section */}
-        <div className="video-card-container">
-          {filteredVideos.length > 0 ? (
+        {/* RECOMMENDATIONS */}
+        {!search && recommended?.length > 0 && (
+          <Box mb={6} className="recommendation-section">
+            <Heading size="md" mb={4}>Recommended For You</Heading>
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-              {filteredVideos.map((video) => (
-                <VideoCard key={video.id} video={video} />
+              {recommended.map((v) => (
+                <VideoCard key={v.id} video={v} />
+              ))}
+            </SimpleGrid>
+            <Divider my={4} />
+          </Box>
+        )}
+
+        {/* ALL MOVIES */}
+        <div className="video-card-container">
+          <Heading size="md" mb={4}>Movies</Heading>
+          {filtered.length ? (
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+              {filtered.map((v) => (
+                <VideoCard key={v.id} video={v} />
               ))}
             </SimpleGrid>
           ) : (
-            <div className="no-videos-text">No videos found.</div>
+            <Box textAlign="center">No videos found.</Box>
           )}
         </div>
       </Box>

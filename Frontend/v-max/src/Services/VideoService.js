@@ -65,19 +65,19 @@ export const deleteVideo = async (id) => {
 
 // Stream a video by ID
 export const streamVideo = async (videoId) => {
-    try {
-        const token = localStorage.getItem("jwtToken");
-        const response = await apiClient.get(`video/stream/${videoId}`, {
-            responseType: "blob",
-            headers: {
-                ...(token && { Authorization: `Bearer ${token}` })
-            }
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error streaming video:", error);
-        throw error;
-    }
+  try {
+    const token = localStorage.getItem("jwtToken");
+    const response = await apiClient.get(`video/stream/${videoId}`, {
+      responseType: "blob",
+      headers: {
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error streaming video:", error);
+    throw error;
+  }
 };
 
 
