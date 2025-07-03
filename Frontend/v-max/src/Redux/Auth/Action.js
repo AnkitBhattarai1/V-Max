@@ -5,6 +5,7 @@ import { BASE_URL } from "../../Constants/Urls"
 //Login post request 
 export const login=(userData)=>(dispatch)=>{
     dispatch({type:LOGIN_REQUEST})
+    
     return axios.post(`${BASE_URL}/auth/getToken`,userData)
     .then((res)=>{
         dispatch({type:LOGIN_SUCCESS, Name:res.data.Name, paylaod: res.data.token, UserId:res.data.UserId, Account_info:res.data.Account_info})

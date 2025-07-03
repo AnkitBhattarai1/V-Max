@@ -1,5 +1,3 @@
-// /Redux/VideoReducer/Reducer.js
-
 import {
   CREATE_VIDEO_SUCCESS,
   DELETE_VIDEO_SUCCESS,
@@ -9,10 +7,14 @@ import {
   GET_THUMBNAIL_SUCCESS,
   VIDEO_FAILURE,
   VIDEO_REQUEST,
+  RECOMMENDATION_REQUEST,
+  RECOMMENDATION_SUCCESS,
+  RECOMMENDATION_FAILURE,
 } from "./ActionTypes";
 
 const initialState = {
-  videos: {}, // changed from array to map
+  recommendedvideos: [],  // Array of recommended videos
+  videos: {},             // Map of videoId -> video data
   isLoading: false,
   isError: false,
   video: null,
@@ -22,21 +24,14 @@ const initialState = {
 export const videoReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case VIDEO_REQUEST:
+    case RECOMMENDATION_REQUEST:
       return { ...state, isLoading: true, isError: false };
 
     case VIDEO_FAILURE:
+    case RECOMMENDATION_FAILURE:
       return { ...state, isError: true, isLoading: false };
 
     case GET_VIDEO_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        videos: {
-          ...state.videos,
-          [payload.id]: payload,
-        },
-      };
-
     case CREATE_VIDEO_SUCCESS:
       return {
         ...state,
@@ -74,6 +69,13 @@ export const videoReducer = (state = initialState, { type, payload }) => {
           ...state.videos,
           ...videoMap,
         },
+      };
+
+    case RECOMMENDATION_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        recommendedvideos: payload, // payload expected to be array of video objects
       };
 
     default:

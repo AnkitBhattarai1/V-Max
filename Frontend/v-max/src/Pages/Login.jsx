@@ -21,20 +21,20 @@ import {
 import Logo from "../Imges/PLY.png"
 import { login } from '../Redux/Auth/Action';
 import { useToast } from '@chakra-ui/react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import "./Navbar.css"
 
 export const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
-  const [email_or_username,setemail_or_username]=useState("User@123")
-  const [password,setpassword]=useState("User@123")
+  const [email_or_username,setemail_or_username]=useState("")
+  const [password,setpassword]=useState("")
   const dispatch=useDispatch()
   const location=useLocation()
   const navigate=useNavigate()
   const toast = useToast()
-  
+  const store = useStore();
   const auth=useSelector((store)=>store.authReducer.isAuth)
   const err=useSelector((store)=>store.authReducer.isError)
 
@@ -43,31 +43,55 @@ export const Login = () => {
 
  
  const handleLogin=()=>{
+   if (!email_or_username || !password) {
+     toast({
+       position: 'top',
+       isClosable: true,
+       duration: 2000,
+       status: "error",
+       render: () => (
+         <Box color='white' p={3} bg='red.500'>
+           Please fill in both email and password fields.
+         </Box>
+       ),
+     });
+     return;
+   }
    const userData={
        email_or_username,
        password
    }
-   console.log(userData)
-
-     dispatch(login(userData)).then(()=>{
-    
-    toast({
-      position: 'top',
-      isClosable: true,
-      duration: 2000,
-      status: "success",
-      render: () => (
-        <Box color='white' p={3} bg='blue.500'>
-          Login successfully! 😊 
-        </Box>
-      ),
-     
-    })
-    navigate("/home")
-      //  navigate("/")
-   })
-
- }
+   dispatch(login(userData)).then((res)=>{
+     // If the login action returns a fulfilled promise, show success; otherwise, show failure
+     const state = store.getState();
+     if(state.authReducer.isAuth && !state.authReducer.isError){
+       toast({
+         position: 'top',
+         isClosable: true,
+         duration: 2000,
+         status: "success",
+         render: () => (
+           <Box color='white' p={3} bg='blue.500'>
+             Login successfully! 😊 
+           </Box>
+         ),
+       });
+       navigate("/home");
+     } else {
+       toast({
+         position: 'top',
+         isClosable: true,
+         duration: 2000,
+         status: "error",
+         render: () => (
+           <Box color='white' p={3} bg='red.500'>
+             Login failed! Incorrect email or password.
+           </Box>
+         ),
+       });
+     }
+   });
+}
 
 
 
@@ -144,4 +168,3 @@ export const Login = () => {
     </Box>
   );
 };
-
