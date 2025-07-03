@@ -11,7 +11,7 @@ set -e
 echo "Running with: $SQL_SERVER:$SQL_SERVER_PORT, User: $MYSQL_USERNAME, Port: $VIDEO_SERVICE_SERVER_PORT"
 
 if [ -f "target/videro_service.jar" ]; then
-    java -jar target/auth_service.jar
+  java -jar target/auth_service.jar
 else
-    mvn spring-boot:run
+  mvn spring-boot:run
 fi

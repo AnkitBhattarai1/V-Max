@@ -1,6 +1,5 @@
 package np.com.bhattaraiankit.auth_service.Configs;
 
-
 import jakarta.ws.rs.HttpMethod;
 
 import org.springframework.context.annotation.Bean;
@@ -26,47 +25,47 @@ import np.com.bhattaraiankit.auth_service.Services.SecurityUserService;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserRepo userRepo;
+  private final UserRepo userRepo;
 
-    SecurityConfig(UserRepo userRepo){
-        this.userRepo=userRepo;
-    }
+  SecurityConfig(UserRepo userRepo) {
+    this.userRepo = userRepo;
+  }
 
-    @Bean 
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-/
-@Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+  @Bean
+  PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    httpSecurity/*.cors(Customizer.withDefaults())*/
-        .csrf(c->c.disable())
-        .authorizeHttpRequests(auth->{
-            auth.requestMatchers(HttpMethod.OPTIONS).permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/getToken").permitAll()
-                .requestMatchers(HttpMethod.GET, "/auth/getUser", "/auth/isUserExist").permitAll()
-                .anyRequest().authenticated();
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+
+    httpSecurity/* .cors(Customizer.withDefaults()) */
+        .csrf(c -> c.disable())
+        .authorizeHttpRequests(auth -> {
+          auth.requestMatchers(HttpMethod.OPTIONS).permitAll()
+              .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/getToken").permitAll()
+              .requestMatchers(HttpMethod.GET, "/auth/getUser", "/auth/isUserExist").permitAll()
+              .anyRequest().authenticated();
         });
 
     return httpSecurity.build();
-}
-    @Bean 
-    UserDetailsService userDetailsService(){
-        return new SecurityUserService(userRepo, passwordEncoder());
-    }
+  }
 
-    @Bean 
-    AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
-        dao.setUserDetailsService(userDetailsService());
-        dao.setPasswordEncoder(passwordEncoder());
-        return dao; 
-    }
+  @Bean
+  UserDetailsService userDetailsService() {
+    return new SecurityUserService(userRepo, passwordEncoder());
+  }
 
-    @Bean 
-     AuthenticationManager authenticationManger(AuthenticationConfiguration configuration) throws Exception
-    {
-        return configuration.getAuthenticationManager();
-    }
+  @Bean
+  AuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
+    dao.setUserDetailsService(userDetailsService());
+    dao.setPasswordEncoder(passwordEncoder());
+    return dao;
+  }
+
+  @Bean
+  AuthenticationManager authenticationManger(AuthenticationConfiguration configuration) throws Exception {
+    return configuration.getAuthenticationManager();
+  }
 }

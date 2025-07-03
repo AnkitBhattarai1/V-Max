@@ -13,52 +13,52 @@ import org.springframework.stereotype.Component;
 import np.com.bhattaraiankit.api_gateway.Utils.JwtUtils;
 
 @Component
-public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config>{
+public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
-    public AuthenticationFilter(){
-        super(Config.class);
-    }
+  public AuthenticationFilter() {
+    super(Config.class);
+  }
 
-    @Autowired
-    private JwtUtils jwtUtils;
-   
-    @Autowired 
-    RouteValidator routeValidator;
+  @Autowired
+  private JwtUtils jwtUtils;
 
-    public static class Config{
+  @Autowired
+  RouteValidator routeValidator;
 
-    }
+  public static class Config {
 
-    @Override
-    public GatewayFilter apply(Config config) {
-        //ServerWebExchane and GatewayFilterChain ....
-        return ((exchange,chain) -> {
-           
-                if(routeValidator.isSecured.test(exchange.getRequest())){
+  }
 
-                    if(!(exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION))){
-                        ServerHttpResponse res = exchange.getResponse();
-                        res.setStatusCode(HttpStatus.UNAUTHORIZED);
-                        return res.setComplete();
-                    }
-                        String auth;
-                        List<String> headers = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION);
-                       
-                        if(headers==null){
-                            ServerHttpResponse res = exchange.getResponse();
-                            res.setStatusCode(HttpStatus.UNAUTHORIZED);
-                            return res.setComplete();
-                        }
-                         auth = headers.get(0);
+  @Override
+  public GatewayFilter apply(Config config) {
+    // ServerWebExchane and GatewayFilterChain ....
+    return ((exchange, chain) -> {
 
-                         if(auth!=null && auth.startsWith("Bearer "))
-                             auth = auth.substring(7);
-                       
-                         jwtUtils.validateToken(auth);
-                    
-                }
+      if (routeValidator.isSecured.test(exchange.getRequest())) {
 
-                return chain.filter(exchange);
-        });
-    }
+        if (!(exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION))) {
+          ServerHttpResponse res = exchange.getResponse();
+          res.setStatusCode(HttpStatus.UNAUTHORIZED);
+          return res.setComplete();
+        }
+        String auth;
+        List<String> headers = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION);
+
+        if (headers == null) {
+          ServerHttpResponse res = exchange.getResponse();
+          res.setStatusCode(HttpStatus.UNAUTHORIZED);
+          return res.setComplete();
+        }
+        auth = headers.get(0);
+
+        if (auth != null && auth.startsWith("Bearer "))
+          auth = auth.substring(7);
+
+        jwtUtils.validateToken(auth);
+
+      }
+
+      return chain.filter(exchange);
+    });
+  }
 }

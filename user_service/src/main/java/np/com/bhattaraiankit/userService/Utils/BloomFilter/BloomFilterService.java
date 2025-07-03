@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BloomFilterService {
 
-    private final String BLOOM_FILTER_SECRET_KEY = "ankit bhattarai";
+    private final String BLOOM_FILTER_SECRET_KEY = "user_service_bloom_filter";
 
     @Autowired
     RedisTemplate<String,byte[]> redisTemplate;

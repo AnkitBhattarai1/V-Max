@@ -28,37 +28,59 @@ spring:
           predicates:
             - Path=/auth/**
 
+
+
         - id: user-service-route
           uri: lb://user-service
           predicates:
             - Path=/user/**
-
+        
         - id: video-service-route
           uri: lb://video-service
           predicates:
             - Path=/video/**
+          filters:
+            - name: AuthenticationFilter
 
         - id: movies-service-route
           uri: lb://video-service
           predicates:
             - Path=/movie/**
+          filters:
+            - name: AuthenticationFilter
         
         - id: series-service-route
           uri: lb://video-service
           predicates:
             - Path=/series/**
+          filters:
+            - name: AuthenticationFilter
 
         - id: season-service-route
           uri: lb://video-service
           predicates:
             - Path=/season/**
+          filters:
+            - name: AuthenticationFilter
         
         - id: episode-service-route
           uri: lb://video-service
           predicates:
             - Path=/episode/**
+          filters:
+            - name: AuthenticationFilter
         
         - id: rating_and_recommendation-service-route
           uri: lb://rating-and-recommendation
           predicates:
             - Path=/recommendation/**
+          filters:
+            - name: AuthenticationFilter
+
+
+        - id: rating_and_recommendation-service-route
+          uri: lb://rating-and-recommendation
+          predicates:
+            - Path=/rating/**
+          filters:
+            - name: AuthenticationFilter

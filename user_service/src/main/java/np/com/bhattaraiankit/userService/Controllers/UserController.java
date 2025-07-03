@@ -29,15 +29,18 @@ public class UserController {
     //api endpoint for starting the registration process....
     @PostMapping("/startReg")
     public ResponseEntity<?> startRegistration(@RequestBody String email)
+
     throws MessagingException{
 
     return ResponseEntity.ok().body(userService.registerUserEmail(email));
+   
     } 
 
     // api endpoint to verify if the entered email is right or not...
     @PostMapping("/verify")
     public ResponseEntity<String> verifyUserEmail(@RequestParam("email") String email, 
             @RequestParam("verificationCode") String verification_code)
+   
             throws MessagingException{
                     String response = userService.verifyUserEmail(email, verification_code);
                     return  new ResponseEntity<String>(response, HttpStatus.OK);
@@ -53,12 +56,4 @@ public class UserController {
     public ResponseEntity<RegistrationUserResponse> getUser(@RequestParam("email") String email){ 
         return new ResponseEntity<RegistrationUserResponse>(userService.getRegisteredUser(email),HttpStatus.OK);
     }
-
-    /*@GetMapping("/self")
-    public ResponseEntity<UserResponse> getSelf(){
-        reuturn null;
-    }
-    for this in api_gateway first the X-user-id is to be set in header by extracting the credentials from the jwt token and based on that the self is returned . 
-    For now it is handled throug getUser().......
-    */
 }
